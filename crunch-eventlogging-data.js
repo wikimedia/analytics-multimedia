@@ -62,6 +62,29 @@ function median( arr ) {
 }
 
 /**
+ * Takes a string with EventLogging data, calls back with an array
+ * of events.
+ * @param {string|Buffer} data
+ * @param {Function} cb
+ * @param {Error/null} cb.err
+ * @param {Object[]} cb.events
+ */
+function loadStr( data, cb ) {
+	var events = [],
+		lines = data.split( '\n' );
+
+	for ( i = 0; i < lines.length; i++ ) {
+		try {
+			event = JSON.parse( lines[i] );
+		} catch ( err ) {}
+
+		events.push( event );
+	}
+
+	cb( null, events );
+}
+
+/**
  * Loads a file with EventLogging data, calls back with an array of
  * events.
  * @param {string} fname Path to the file
@@ -70,27 +93,38 @@ function median( arr ) {
  * @param {Object[]} cb.events
  */
 function loadFile( fname, cb ) {
-	var lines, i, event,
-		events = [];
-
-	try {
-		data = fs.readFileSync( fname, 'utf8' );
-	} catch ( err ) {
-		cb( err, [] );
-	}
-	
-	lines = data.split( '\n' );
-
-	for ( i = 0; i < lines.length; i++ ) {
-		try {
-			event = JSON.parse( lines[i] );
-		} catch ( err ) {
+	fs.readFile( fname, 'utf8', function ( err, data ) {
+		if ( err !== null ) {
+			cb( err, [] );
 		}
 
-		events.push( event );
-	}
+		loadStr( data, cb );
+	} );
+}
 
-	cb( null, events );
+/**
+ * Loads data from stdin and calls back with an array of events.
+ * @param {Function} cb
+ * @param {Error/null} cb.err
+ * @param {Object[]} cb.events
+ */
+function loadStdin( cb ) {
+	var data = '';
+
+	process.stdin.on( 'data', function ( buf ) {
+		data += buf.toString();
+	} );
+
+	process.stdin.on( 'error', function ( err ) {
+		cb( err, [] );
+		process.stdin.pause();
+	} );
+
+	process.stdin.on( 'end', function () {
+		loadStr( data, cb );
+	} );
+
+	process.stdin.resume();
 }
 
 /**
@@ -137,9 +171,6 @@ function EventTraverser( events ) {
 /**
  * @method
  * Traverses the events list and calls a handler for each one.
- * @returns {Object} All data we found
- * @returns {number} return.totalEvents How many events we found in the array
- * @returns {Object} return.actionCounts Of form { action1: 15, action2: 13, action3: 10 }
  */
 EventTraverser.prototype.traverse = function () {
 	var i, event;
@@ -151,8 +182,6 @@ EventTraverser.prototype.traverse = function () {
 	}
 
 	this.handleFinish();
-
-	return this.data;
 };
 
 /**
@@ -355,7 +384,7 @@ MediaViewerPerfEventTraverser.prototype.handleFinish = function () {
 
 // Actually do stuff with the data
 // Right now it's just a stupid-simple test case.
-loadFile( './example.eventlogging', function ( err, events ) {
+loadStdin( function ( err, events ) {
 	var mvEvtTrav, mvpEvtTrav, mvdata, mvpdata;
 
 	if ( err !== null ) {
@@ -368,8 +397,11 @@ loadFile( './example.eventlogging', function ( err, events ) {
 	mvEvtTrav = new MediaViewerEventTraverser( events.MediaViewer || [] );
 	mvpEvtTrav = new MediaViewerPerfEventTraverser( events.MediaViewerPerf || [] );
 
-	mvdata = mvEvtTrav.traverse();
-	mvpdata = mvpEvtTrav.traverse();
+	mvEvtTrav.traverse();
+	mvpEvtTrav.traverse();
+
+	mvdata = mvEvtTrav.data;
+	mvpdata = mvpEvtTrav.data;
 
 	console.log( mvdata );
 	console.log( mvpdata );
