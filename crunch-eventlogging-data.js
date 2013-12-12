@@ -29,7 +29,29 @@ var
 	eventSchemata = {
 		MediaViewer: true,
 		MediaViewerPerf: true
-	};
+	},
+
+	mvActions = [
+		'thumbnail-link-click',
+		'enlarge-link-click',
+		'fullscreen-link-click',
+		'defullscreen-link-click',
+		'site-link-click',
+		'close-link-click'
+	],
+
+	mvpActions = [
+		'image-load',
+		'image-resize',
+		'metadata-fetch',
+		'gender-fetch'
+	],
+
+	mvpTypes = [
+		'median',
+		'mean',
+		'total'
+	];
 
 // I'm angry that I have to implement this so you don't GET any documentation
 function sum( arr ) {
@@ -385,7 +407,9 @@ MediaViewerPerfEventTraverser.prototype.handleFinish = function () {
 // Actually do stuff with the data
 // Right now it's just a stupid-simple test case.
 loadStdin( function ( err, events ) {
-	var mvEvtTrav, mvpEvtTrav, mvdata, mvpdata;
+	var mvEvtTrav, mvpEvtTrav, mvdata, mvpdata,
+		mvfile, mvpfile, mvcsv, mvpcsv,
+		i, j, action, type, targetdata;
 
 	if ( err !== null ) {
 		console.log( err );
@@ -403,6 +427,39 @@ loadStdin( function ( err, events ) {
 	mvdata = mvEvtTrav.data;
 	mvpdata = mvpEvtTrav.data;
 
-	console.log( mvdata );
-	console.log( mvpdata );
+	mvfile = process.argv[3];
+	mvpfile = process.argv[4];
+
+	mvcsv = process.argv[2];
+
+	for ( i = 0; i < mvActions.length; i++ ) {
+		action = mvActions[i];
+
+		if ( !mvdata.actionCounts[action] ) {
+			mvdata.actionCounts[action] = 0;
+		}
+
+		mvcsv += ',' + mvdata.actionCounts[action];
+	}
+
+	fs.appendFile( process.argv[3], mvcsv + '\n' );
+
+	mvpcsv = process.argv[2];
+
+	for ( i = 0; i < mvpActions.length; i++ ) {
+		action = mvpActions[i];
+
+		for ( j = 0; j < mvpTypes.length; j++ ) {
+			type = mvpTypes[j];
+			targetdata = mvpdata[type + 'LoadTimesByAction'];
+
+			if ( !targetdata[action] ) {
+				targetdata[action] = 0;
+			}
+
+			mvpcsv += ',' + targetdata[action];
+		}
+	}
+
+	fs.appendFile( process.argv[4], mvpcsv + '\n' );
 } );
