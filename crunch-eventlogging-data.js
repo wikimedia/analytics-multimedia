@@ -17,9 +17,13 @@
 
 
 var
+	/* config to be populated later */
+	config,
+
 	/* requires */
 	util = require( 'util' ),
 	fs = require( 'fs' ),
+	defaultConfig = require( './config.default.json' ),
 
 	/* global objects storing stats */
 	perWikiStats = {},
@@ -459,13 +463,21 @@ MediaViewerPerfEventTraverser.prototype.handleFinish = function () {
 	}
 };
 
+try {
+	config = require( './config.json' );
+} catch ( e ) {
+	console.log( 'No config found, using defaults...ignore this in testing, fix by creating config.json otherwise.' );
+	config = require( './config.default.json' );
+}
+
 // Actually do stuff with the data
 // Right now it's just a stupid-simple test case.
 loadStdin( function ( err, events ) {
 	var mvEvtTrav, mvpEvtTrav, mvdata, mvpdata,
 		mvfile, mvpfile, mvcsv, mvpcsv,
 		imgtypefile, imgsizefile,
-		i, j, action, type, targetdata;
+		i, j, action, type, targetdata,
+		date = process.argv[2];
 
 	if ( err !== null ) {
 		console.log( err );
@@ -483,87 +495,95 @@ loadStdin( function ( err, events ) {
 	mvdata = mvEvtTrav.data;
 	mvpdata = mvpEvtTrav.data;
 
-	imgtypefile = process.argv[5];
-	imgsizefile = process.argv[6];
+	imgtypefile = config.files.imgtypes;
+	imgsizefile = config.files.imgsizes;
 
-	importOrdinalCsvFile( imgsizefile, function ( err, data ) {
-		var i, datakeys,
-			imageSizes = Object.keys( mvpdata.imageSizes ),
-			imgsizecsv = '';
+	if ( imgsizefile ) {
+		importOrdinalCsvFile( imgsizefile, function ( err, data ) {
+			var i, datakeys,
+				imageSizes = Object.keys( mvpdata.imageSizes ),
+				imgsizecsv = '';
 
-		for ( i = 0; i < imageSizes.length; i++ ) {
-			if ( data[imageSizes[i]] !== undefined ) {
-				data[imageSizes[i]] += mvpdata.imageSizes[imageSizes[i]];
-			} else {
-				data[imageSizes[i]] = mvpdata.imageSizes[imageSizes[i]];
+			for ( i = 0; i < imageSizes.length; i++ ) {
+				if ( data[imageSizes[i]] !== undefined ) {
+					data[imageSizes[i]] += mvpdata.imageSizes[imageSizes[i]];
+				} else {
+					data[imageSizes[i]] = mvpdata.imageSizes[imageSizes[i]];
+				}
 			}
-		}
 
-		datakeys = Object.keys( data );
+			datakeys = Object.keys( data );
 
-		for ( i = 0; i < datakeys.length; i++ ) {
-			imgsizecsv += datakeys[i] + ',' + data[datakeys[i]] + '\n';
-		}
-
-		fs.writeFile( imgsizefile, imgsizecsv );
-	} );
-
-	importOrdinalCsvFile( imgtypefile, function ( err, data ) {
-		var i,
-			existingImageTypes = Object.keys( data ),
-			imageTypes = Object.keys( mvpdata.imageTypes ),
-			imgtypecsv = '';
-
-		for ( i = 0; i < imageTypes.length; i++ ) {
-			if ( data[imageTypes[i]] !== undefined ) {
-				data[imageTypes[i]] += mvpdata.imageTypes[imageTypes[i]];
-			} else {
-				data[imageTypes[i]] = mvpdata.imageTypes[imageTypes[i]];
+			for ( i = 0; i < datakeys.length; i++ ) {
+				imgsizecsv += datakeys[i] + ',' + data[datakeys[i]] + '\n';
 			}
-		}
 
-		datakeys = Object.keys( data );
-
-		for ( i = 0; i < datakeys.length; i++ ) {
-			imgtypecsv += datakeys[i] + ',' + data[datakeys[i]] + '\n';
-		}
-
-		fs.writeFile( imgtypefile, imgtypecsv );
-	} );
-
-	mvfile = process.argv[3];
-	mvpfile = process.argv[4];
-
-	mvcsv = process.argv[2];
-
-	for ( i = 0; i < mvActions.length; i++ ) {
-		action = mvActions[i];
-
-		if ( !mvdata.actionCounts[action] ) {
-			mvdata.actionCounts[action] = 0;
-		}
-
-		mvcsv += ',' + mvdata.actionCounts[action];
+			fs.writeFile( imgsizefile, imgsizecsv );
+		} );
 	}
 
-	fs.appendFile( mvfile, mvcsv + '\n' );
+	if ( imgtypefile ) {
+		importOrdinalCsvFile( imgtypefile, function ( err, data ) {
+			var i,
+				existingImageTypes = Object.keys( data ),
+				imageTypes = Object.keys( mvpdata.imageTypes ),
+				imgtypecsv = '';
 
-	mvpcsv = process.argv[2];
-
-	for ( i = 0; i < mvpActions.length; i++ ) {
-		action = mvpActions[i];
-
-		for ( j = 0; j < mvpTypes.length; j++ ) {
-			type = mvpTypes[j];
-			targetdata = mvpdata[type + 'LoadTimesByAction'];
-
-			if ( !targetdata[action] ) {
-				targetdata[action] = 0;
+			for ( i = 0; i < imageTypes.length; i++ ) {
+				if ( data[imageTypes[i]] !== undefined ) {
+					data[imageTypes[i]] += mvpdata.imageTypes[imageTypes[i]];
+				} else {
+					data[imageTypes[i]] = mvpdata.imageTypes[imageTypes[i]];
+				}
 			}
 
-			mvpcsv += ',' + targetdata[action];
-		}
+			datakeys = Object.keys( data );
+
+			for ( i = 0; i < datakeys.length; i++ ) {
+				imgtypecsv += datakeys[i] + ',' + data[datakeys[i]] + '\n';
+			}
+
+			fs.writeFile( imgtypefile, imgtypecsv );
+		} );
 	}
 
-	fs.appendFile( mvpfile, mvpcsv + '\n' );
+	mvfile = config.files.mvdata;
+	mvpfile = config.files.mvpdata;
+
+	if ( mvfile ) {
+		mvcsv = date;
+
+		for ( i = 0; i < mvActions.length; i++ ) {
+			action = mvActions[i];
+
+			if ( !mvdata.actionCounts[action] ) {
+				mvdata.actionCounts[action] = 0;
+			}
+
+			mvcsv += ',' + mvdata.actionCounts[action];
+		}
+
+		fs.appendFile( mvfile, mvcsv + '\n' );
+	}
+
+	if ( mvpfile ) {
+		mvpcsv = date;
+
+		for ( i = 0; i < mvpActions.length; i++ ) {
+			action = mvpActions[i];
+
+			for ( j = 0; j < mvpTypes.length; j++ ) {
+				type = mvpTypes[j];
+				targetdata = mvpdata[type + 'LoadTimesByAction'];
+
+				if ( !targetdata[action] ) {
+					targetdata[action] = 0;
+				}
+
+				mvpcsv += ',' + targetdata[action];
+			}
+		}
+
+		fs.appendFile( mvpfile, mvpcsv + '\n' );
+	}
 } );
