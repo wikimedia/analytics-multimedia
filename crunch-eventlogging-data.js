@@ -84,6 +84,47 @@ function median( arr ) {
 }
 
 /**
+ * Takes a CSV and generates an object out of it.
+ * @param {string} data
+ * @returns {Object}
+ */
+function csvToObject( data ) {
+	var i, line,
+		newObj = {},
+		lines = data.split( '\n' );
+
+	for ( i = 0; i < lines.length; i++ ) {
+		line = lines[i].split( ',' );
+		if ( line.length === 2 ) {
+			newObj[line[0]] = parseInt( line[1], 10 );
+		}
+	}
+
+	return newObj;
+}
+
+/**
+ * Takes a filename and imports it as a CSV with two columns, key -> value.
+ * @param {string} filename
+ * @param {Function} cb
+ * @param {Error/null} cb.err
+ * @param {Object} cb.data
+ */
+function importOrdinalCsvFile( filename, cb ) {
+	fs.readFile( filename, 'utf8', function ( err, data ) {
+		if ( err !== null ) {
+			cb( err, {} );
+		}
+
+		if ( data ) {
+			cb( null, csvToObject( data ) );
+		} else {
+			cb( null, {} );
+		}
+	} );
+}
+
+/**
  * Takes a string with EventLogging data, calls back with an array
  * of events.
  * @param {string|Buffer} data
@@ -263,6 +304,8 @@ function MediaViewerPerfEventTraverser( events ) {
 	this.data.loadTimesByFileType = {};
 	this.data.loadTimesNormalized = {};
 	this.data.loadTimesNormalizedByFileType = {};
+	this.data.imageSizes = {};
+	this.data.imageTypes = {};
 }
 
 util.inherits( MediaViewerPerfEventTraverser, EventTraverser );
@@ -306,6 +349,18 @@ MediaViewerPerfEventTraverser.prototype.handleEvent = function ( i, event ) {
 		}
 
 		this.data.loadTimesNormalizedByFileType[event.event.action][event.event.fileType].push( event.event.milliseconds / event.event.fileSize );
+
+		if ( this.data.imageSizes[event.event.fileSize] === undefined ) {
+			this.data.imageSizes[event.event.fileSize] = 0;
+		}
+
+		this.data.imageSizes[event.event.fileSize]++;
+
+		if ( this.data.imageTypes[event.event.fileType] === undefined ) {
+			this.data.imageTypes[event.event.fileType] = 0;
+		}
+
+		this.data.imageTypes[event.event.fileType]++;
 	}
 };
 
@@ -409,6 +464,7 @@ MediaViewerPerfEventTraverser.prototype.handleFinish = function () {
 loadStdin( function ( err, events ) {
 	var mvEvtTrav, mvpEvtTrav, mvdata, mvpdata,
 		mvfile, mvpfile, mvcsv, mvpcsv,
+		imgtypefile, imgsizefile,
 		i, j, action, type, targetdata;
 
 	if ( err !== null ) {
@@ -427,6 +483,54 @@ loadStdin( function ( err, events ) {
 	mvdata = mvEvtTrav.data;
 	mvpdata = mvpEvtTrav.data;
 
+	imgtypefile = process.argv[5];
+	imgsizefile = process.argv[6];
+
+	importOrdinalCsvFile( imgsizefile, function ( err, data ) {
+		var i, datakeys,
+			imageSizes = Object.keys( mvpdata.imageSizes ),
+			imgsizecsv = '';
+
+		for ( i = 0; i < imageSizes.length; i++ ) {
+			if ( data[imageSizes[i]] !== undefined ) {
+				data[imageSizes[i]] += mvpdata.imageSizes[imageSizes[i]];
+			} else {
+				data[imageSizes[i]] = mvpdata.imageSizes[imageSizes[i]];
+			}
+		}
+
+		datakeys = Object.keys( data );
+
+		for ( i = 0; i < datakeys.length; i++ ) {
+			imgsizecsv += datakeys[i] + ',' + data[datakeys[i]] + '\n';
+		}
+
+		fs.writeFile( imgsizefile, imgsizecsv );
+	} );
+
+	importOrdinalCsvFile( imgtypefile, function ( err, data ) {
+		var i,
+			existingImageTypes = Object.keys( data ),
+			imageTypes = Object.keys( mvpdata.imageTypes ),
+			imgtypecsv = '';
+
+		for ( i = 0; i < imageTypes.length; i++ ) {
+			if ( data[imageTypes[i]] !== undefined ) {
+				data[imageTypes[i]] += mvpdata.imageTypes[imageTypes[i]];
+			} else {
+				data[imageTypes[i]] = mvpdata.imageTypes[imageTypes[i]];
+			}
+		}
+
+		datakeys = Object.keys( data );
+
+		for ( i = 0; i < datakeys.length; i++ ) {
+			imgtypecsv += datakeys[i] + ',' + data[datakeys[i]] + '\n';
+		}
+
+		fs.writeFile( imgtypefile, imgtypecsv );
+	} );
+
 	mvfile = process.argv[3];
 	mvpfile = process.argv[4];
 
@@ -442,7 +546,7 @@ loadStdin( function ( err, events ) {
 		mvcsv += ',' + mvdata.actionCounts[action];
 	}
 
-	fs.appendFile( process.argv[3], mvcsv + '\n' );
+	fs.appendFile( mvfile, mvcsv + '\n' );
 
 	mvpcsv = process.argv[2];
 
@@ -461,5 +565,5 @@ loadStdin( function ( err, events ) {
 		}
 	}
 
-	fs.appendFile( process.argv[4], mvpcsv + '\n' );
+	fs.appendFile( mvpfile, mvpcsv + '\n' );
 } );
