@@ -1,6 +1,6 @@
 -- Get statistics, per day, for various actions in Media Viewer.
 
-select substring(timestamp, 1, 8) as datestring,
+select concat(substring(timestamp, 1, 4), '-', substring(timestamp, 5, 2), '-', substring(timestamp, 7, 2) as datestring,
 	sum(case when event_action = 'thumbnail-link-click' then 1 else 0 end) as 'thumbnail-link-click',
 	sum(case when event_action = 'enlarge-link-click' then 1 else 0 end) as 'enlarge-link-click',
 	sum(case when event_action = 'fullscreen-link-click' then 1 else 0 end) as 'fullscreen-link-click',
