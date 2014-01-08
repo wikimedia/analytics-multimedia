@@ -16,6 +16,7 @@ select substring(timestamp, 1, 8) as datestring,
 		std(case when event_action = 'gender-fetch' then event_milliseconds else 0 end) as 'gender-fetch-meantime'
 
 	from MediaViewerPerf_6636500
+	where event_version = '1.1'
 
 	group by datestring
 	order by datestring asc;
