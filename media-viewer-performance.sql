@@ -14,7 +14,8 @@ select substring(timestamp, 1, 8) as datestring,
 		sum(case when event_action = 'gender-fetch' then event_milliseconds else 0 end) as 'gender-fetch-totaltime',
 		avg(case when event_action = 'gender-fetch' then event_milliseconds else 0 end) as 'gender-fetch-meantime',
 		std(case when event_action = 'gender-fetch' then event_milliseconds else 0 end) as 'gender-fetch-meantime'
+
 	from MediaViewerPerf_6636500
-	where timestamp < concat(date_format(curdate(), '%Y%m%d'), '000000')
+
 	group by datestring
 	order by datestring asc;

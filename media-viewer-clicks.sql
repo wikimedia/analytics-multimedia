@@ -16,6 +16,5 @@ select substring(timestamp, 1, 8) as datestring,
 			union all
 		select timestamp, event_action from MediaViewer_6054199) as MediaViewerUnioned
 
-	where timestamp < concat(date_format(curdate(), '%Y%m%d'), '000000')
 	group by datestring
 	order by datestring asc;
