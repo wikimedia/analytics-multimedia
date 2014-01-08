@@ -16,10 +16,6 @@ select substring(timestamp, 1, 8) as datestring,
 			union all
 		select * from MediaViewer_6054199) as MediaViewerUnioned
 
-	where substring(timestamp, 1, 8) > (select date_found from MediaViewerStatsUtility where datatype = 'mv' order by date_found desc limit 1)
-		and timestamp < concat(date_format(curdate(), '%Y%m%d'), '000000')
+	where timestamp < concat(date_format(curdate(), '%Y%m%d'), '000000')
 	group by datestring
 	order by datestring asc;
-
-insert into MediaViewerStatsUtility (datatype, date_found) values
-	('mv', (select substring(timestamp, 1, 8) as datestring from MediaViewer_6636420 order by datestring desc limit 1));
