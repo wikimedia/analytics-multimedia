@@ -8,13 +8,13 @@ select substring(timestamp, 1, 8) as datestring,
 	sum(case when event_action = 'site-link-click' then 1 else 0 end) as 'site-link-click',
 	sum(case when event_action = 'close-link-click' then 1 else 0 end) as 'close-link-click'
 
-	from (select * from MediaViewer_6636420
+	from (select timestamp, event_action from MediaViewer_6636420
 			union all
-		select * from MediaViewer_6066908
+		select timestamp, event_action from MediaViewer_6066908
 			union all
-		select * from MediaViewer_6055641
+		select timestamp, event_action from MediaViewer_6055641
 			union all
-		select * from MediaViewer_6054199) as MediaViewerUnioned
+		select timestamp, event_action from MediaViewer_6054199) as MediaViewerUnioned
 
 	where timestamp < concat(date_format(curdate(), '%Y%m%d'), '000000')
 	group by datestring
