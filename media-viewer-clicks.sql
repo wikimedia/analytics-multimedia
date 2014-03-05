@@ -6,9 +6,13 @@ select concat(substring(timestamp, 1, 4), '-', substring(timestamp, 5, 2), '-', 
 	sum(case when event_action = 'fullscreen-link-click' then 1 else 0 end) as 'fullscreen-link-click',
 	sum(case when event_action = 'defullscreen-link-click' then 1 else 0 end) as 'defullscreen-link-click',
 	sum(case when event_action = 'site-link-click' then 1 else 0 end) as 'site-link-click',
-	sum(case when event_action = 'close-link-click' then 1 else 0 end) as 'close-link-click'
+	sum(case when event_action = 'close-link-click' then 1 else 0 end) as 'close-link-click',
+	sum(case when event_action = 'use-this-file-link-click' then 1 else 0 end) as 'use-this-file-link-click',
+	sum(case when event_action = 'image-view' then 1 else 0 end) as 'image-view'
 
-	from (select timestamp, event_action from MediaViewer_6636420
+	from (select timestamp, event_action from MediaViewer_7670440
+			union all
+		select timestamp, event_action from MediaViewer_6636420
 			union all
 		select timestamp, event_action from MediaViewer_6066908
 			union all
