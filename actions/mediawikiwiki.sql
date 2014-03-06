@@ -14,13 +14,13 @@ select concat(substring(timestamp, 1, 4), '-', substring(timestamp, 5, 2), '-', 
 -- Not working yet
 --		select timestamp, event_action from MediaViewer_7670440
 --			union all
-		select timestamp, event_action from MediaViewer_6636420
+		select timestamp, wiki, event_action from MediaViewer_6636420
 			union all
-		select timestamp, event_action from MediaViewer_6066908
+		select timestamp, wiki, event_action from MediaViewer_6066908
 			union all
-		select timestamp, event_action from MediaViewer_6055641
+		select timestamp, wiki, event_action from MediaViewer_6055641
 			union all
-		select timestamp, event_action from MediaViewer_6054199) as MediaViewerUnioned
+		select timestamp, wiki, event_action from MediaViewer_6054199) as MediaViewerUnioned
 
 	where wiki = 'mediawikiwiki'
 
