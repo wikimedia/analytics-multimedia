@@ -10,8 +10,10 @@ select concat(substring(timestamp, 1, 4), '-', substring(timestamp, 5, 2), '-', 
 	sum(case when event_action = 'use-this-file-link-click' then 1 else 0 end) as 'use-this-file-link-click',
 	sum(case when event_action = 'image-view' then 1 else 0 end) as 'image-view'
 
-	from (select timestamp, event_action from MediaViewer_7670440
-			union all
+	from (
+-- Not working yet
+--		select timestamp, event_action from MediaViewer_7670440
+--			union all
 		select timestamp, event_action from MediaViewer_6636420
 			union all
 		select timestamp, event_action from MediaViewer_6066908
