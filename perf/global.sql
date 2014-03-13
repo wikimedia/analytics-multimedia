@@ -13,15 +13,15 @@ select concat(substring(timestamp, 1, 4), '-', substring(timestamp, 5, 2), '-', 
 
 		sum(case when event_type = 'imageinfo' then event_total else 0 end) as 'imageinfo-totaltime',
 		avg(case when event_type = 'imageinfo' then event_total else 0 end) as 'imageinfo-meantime',
-		std(case when event_type = 'imageinfo' then event_total else 0 end) as 'imageinfo-time-std'
+		std(case when event_type = 'imageinfo' then event_total else 0 end) as 'imageinfo-time-std',
 
 		sum(case when event_type = 'imageusage' then event_total else 0 end) as 'imageusage-totaltime',
 		avg(case when event_type = 'imageusage' then event_total else 0 end) as 'imageusage-meantime',
-		std(case when event_type = 'imageusage' then event_total else 0 end) as 'imageusage-time-std'
+		std(case when event_type = 'imageusage' then event_total else 0 end) as 'imageusage-time-std',
 
 		sum(case when event_type = 'thumbnailinfo' then event_total else 0 end) as 'thumbnailinfo-totaltime',
 		avg(case when event_type = 'thumbnailinfo' then event_total else 0 end) as 'thumbnailinfo-meantime',
-		std(case when event_type = 'thumbnailinfo' then event_total else 0 end) as 'thumbnailinfo-time-std'
+		std(case when event_type = 'thumbnailinfo' then event_total else 0 end) as 'thumbnailinfo-time-std',
 
 		sum(case when event_type = 'userinfo' then event_total else 0 end) as 'userinfo-totaltime',
 		avg(case when event_type = 'userinfo' then event_total else 0 end) as 'userinfo-meantime',
