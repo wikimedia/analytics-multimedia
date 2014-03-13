@@ -33,5 +33,7 @@ select concat(substring(timestamp, 1, 4), '-', substring(timestamp, 5, 2), '-', 
 		select event_type, event_total, timestamp, wiki from MultimediaViewerNetworkPerformance_7488625
 	) as MultimediaViewerNetworkPerformanceUnioned
 
+	where timestamp is not null
+
 	group by datestring
 	order by datestring asc;
