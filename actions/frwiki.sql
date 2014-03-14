@@ -11,7 +11,7 @@ select concat(substring(timestamp, 1, 4), '-', substring(timestamp, 5, 2), '-', 
 	sum(case when event_action = 'image-view' then 1 else 0 end) as 'image-view'
 
 	from (
-		select timestamp, event_action from MediaViewer_7670440
+		select timestamp, wiki, event_action from MediaViewer_7670440
 			union all
 		select timestamp, wiki, event_action from MediaViewer_6636420
 			union all
