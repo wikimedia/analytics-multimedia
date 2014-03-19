@@ -1,39 +1,82 @@
-select concat(substring(timestamp, 1, 4), '-', substring(timestamp, 5, 2), '-', substring(timestamp, 7, 2)) as datestring,
-		sum(case when event_type = 'filerepoinfo' then event_total else 0 end) as 'filerepoinfo-totaltime',
-		avg(case when event_type = 'filerepoinfo' then event_total else 0 end) as 'filerepoinfo-meantime',
-		std(case when event_type = 'filerepoinfo' then event_total else 0 end) as 'filerepoinfo-time-std',
+SELECT * FROM ( SELECT * FROM ( SELECT * FROM ( SELECT * FROM ( SELECT * FROM ( SELECT * FROM ( SELECT * FROM ( SELECT * FROM (SELECT concat(substring(timestamp, 1, 4), '-', substring(timestamp, 5, 2), '-', substring(timestamp, 7, 2)) AS datestring FROM (
+SELECT * FROM MultimediaViewerNetworkPerformance_7393226
+UNION ALL
+SELECT * FROM MultimediaViewerNetworkPerformance_7488625
+) AS MultimediaViewerNetworkPerformanceUnioned WHERE timestamp IS NOT NULL GROUP BY datestring ORDER BY datestring ASC) dates
 
-		sum(case when event_type = 'globalusage' then event_total else 0 end) as 'globalusage-totaltime',
-		avg(case when event_type = 'globalusage' then event_total else 0 end) as 'globalusage-meantime',
-		std(case when event_type = 'globalusage' then event_total else 0 end) as 'globalusage-time-std',
+LEFT OUTER JOIN
 
-		sum(case when event_type = 'image' then event_total else 0 end) as 'image-totaltime',
-		avg(case when event_type = 'image' then event_total else 0 end) as 'image-meantime',
-		std(case when event_type = 'image' then event_total else 0 end) as 'image-time-std',
+( SELECT concat(substring(timestamp, 1, 4), '-', substring(timestamp, 5, 2), '-', substring(timestamp, 7, 2)) AS datestring,
+AVG(event_total) AS userinfo_time_mean,
+STD(event_total) AS userinfo_time_std,
+COUNT(*) AS userinfo_sample_size FROM (
+SELECT event_type, event_total, timestamp FROM MultimediaViewerNetworkPerformance_7393226
+UNION ALL
+SELECT event_type, event_total, timestamp FROM MultimediaViewerNetworkPerformance_7488625
+) AS MultimediaViewerNetworkPerformanceUnioned WHERE timestamp IS NOT NULL AND event_type = 'userinfo' GROUP BY datestring ORDER BY datestring ASC ) userinfo_stats USING (datestring) ) date_userinfo
 
-		sum(case when event_type = 'imageinfo' then event_total else 0 end) as 'imageinfo-totaltime',
-		avg(case when event_type = 'imageinfo' then event_total else 0 end) as 'imageinfo-meantime',
-		std(case when event_type = 'imageinfo' then event_total else 0 end) as 'imageinfo-time-std',
+LEFT OUTER JOIN
 
-		sum(case when event_type = 'imageusage' then event_total else 0 end) as 'imageusage-totaltime',
-		avg(case when event_type = 'imageusage' then event_total else 0 end) as 'imageusage-meantime',
-		std(case when event_type = 'imageusage' then event_total else 0 end) as 'imageusage-time-std',
+( SELECT concat(substring(timestamp, 1, 4), '-', substring(timestamp, 5, 2), '-', substring(timestamp, 7, 2)) AS datestring,
+AVG(event_total) AS imageinfo_time_mean,
+STD(event_total) AS imageinfo_time_std,
+COUNT(*) AS imageinfo_sample_size FROM (
+SELECT event_type, event_total, timestamp FROM MultimediaViewerNetworkPerformance_7393226
+UNION ALL
+SELECT event_type, event_total, timestamp FROM MultimediaViewerNetworkPerformance_7488625
+) AS MultimediaViewerNetworkPerformanceUnioned WHERE timestamp IS NOT NULL AND event_type = 'imageinfo' GROUP BY datestring ORDER BY datestring ASC ) imageinfo_stats USING (datestring) ) date_userinfo_imageinfo
 
-		sum(case when event_type = 'thumbnailinfo' then event_total else 0 end) as 'thumbnailinfo-totaltime',
-		avg(case when event_type = 'thumbnailinfo' then event_total else 0 end) as 'thumbnailinfo-meantime',
-		std(case when event_type = 'thumbnailinfo' then event_total else 0 end) as 'thumbnailinfo-time-std',
+LEFT OUTER JOIN
 
-		sum(case when event_type = 'userinfo' then event_total else 0 end) as 'userinfo-totaltime',
-		avg(case when event_type = 'userinfo' then event_total else 0 end) as 'userinfo-meantime',
-		std(case when event_type = 'userinfo' then event_total else 0 end) as 'userinfo-time-std'
+( SELECT concat(substring(timestamp, 1, 4), '-', substring(timestamp, 5, 2), '-', substring(timestamp, 7, 2)) AS datestring,
+AVG(event_total) AS thumbnailinfo_time_mean,
+STD(event_total) AS thumbnailinfo_time_std,
+COUNT(*) AS thumbnailinfo_sample_size FROM (
+SELECT event_type, event_total, timestamp FROM MultimediaViewerNetworkPerformance_7393226
+UNION ALL
+SELECT event_type, event_total, timestamp FROM MultimediaViewerNetworkPerformance_7488625
+) AS MultimediaViewerNetworkPerformanceUnioned WHERE timestamp IS NOT NULL AND event_type = 'thumbnailinfo' GROUP BY datestring ORDER BY datestring ASC ) imageinfo_stats USING (datestring) ) date_userinfo_imageinfo_thumbnailinfo
 
-	from (
-		select event_type, event_total, timestamp, wiki from MultimediaViewerNetworkPerformance_7393226
-			union all
-		select event_type, event_total, timestamp, wiki from MultimediaViewerNetworkPerformance_7488625
-	) as MultimediaViewerNetworkPerformanceUnioned
+LEFT OUTER JOIN
 
-	where timestamp is not null
+( SELECT concat(substring(timestamp, 1, 4), '-', substring(timestamp, 5, 2), '-', substring(timestamp, 7, 2)) AS datestring,
+AVG(event_total) AS filerepoinfo_time_mean,
+STD(event_total) AS filerepoinfo_time_std,
+COUNT(*) AS filerepoinfo_sample_size FROM (
+SELECT event_type, event_total, timestamp FROM MultimediaViewerNetworkPerformance_7393226
+UNION ALL
+SELECT event_type, event_total, timestamp FROM MultimediaViewerNetworkPerformance_7488625
+) AS MultimediaViewerNetworkPerformanceUnioned WHERE timestamp IS NOT NULL AND event_type = 'filerepoinfo' GROUP BY datestring ORDER BY datestring ASC ) imageinfo_stats USING (datestring) ) date_userinfo_imageinfo_thumbnailinfo_filerepoinfo
 
-	group by datestring
-	order by datestring asc;
+LEFT OUTER JOIN
+
+( SELECT concat(substring(timestamp, 1, 4), '-', substring(timestamp, 5, 2), '-', substring(timestamp, 7, 2)) AS datestring,
+AVG(event_total) AS imageusage_time_mean,
+STD(event_total) AS imageusage_time_std,
+COUNT(*) AS imageusage_sample_size FROM (
+SELECT event_type, event_total, timestamp FROM MultimediaViewerNetworkPerformance_7393226
+UNION ALL
+SELECT event_type, event_total, timestamp FROM MultimediaViewerNetworkPerformance_7488625
+) AS MultimediaViewerNetworkPerformanceUnioned WHERE timestamp IS NOT NULL AND event_type = 'imageusage' GROUP BY datestring ORDER BY datestring ASC ) imageinfo_stats USING (datestring) ) date_userinfo_imageinfo_thumbnailinfo_filerepoinfo_imageusage
+
+LEFT OUTER JOIN
+
+( SELECT concat(substring(timestamp, 1, 4), '-', substring(timestamp, 5, 2), '-', substring(timestamp, 7, 2)) AS datestring,
+AVG(event_total) AS globalusage_time_mean,
+STD(event_total) AS globalusage_time_std,
+COUNT(*) AS globalusage_sample_size FROM (
+SELECT event_type, event_total, timestamp FROM MultimediaViewerNetworkPerformance_7393226
+UNION ALL
+SELECT event_type, event_total, timestamp FROM MultimediaViewerNetworkPerformance_7488625
+) AS MultimediaViewerNetworkPerformanceUnioned WHERE timestamp IS NOT NULL AND event_type = 'globalusage' GROUP BY datestring ORDER BY datestring ASC ) imageinfo_stats USING (datestring) ) date_userinfo_imageinfo_thumbnailinfo_filerepoinfo_imageusage_globalusage
+
+LEFT OUTER JOIN
+
+( SELECT concat(substring(timestamp, 1, 4), '-', substring(timestamp, 5, 2), '-', substring(timestamp, 7, 2)) AS datestring,
+AVG(event_total) AS image_time_mean,
+STD(event_total) AS image_time_std,
+COUNT(*) AS image_sample_size FROM (
+SELECT event_type, event_total, timestamp FROM MultimediaViewerNetworkPerformance_7393226
+UNION ALL
+SELECT event_type, event_total, timestamp FROM MultimediaViewerNetworkPerformance_7488625
+) AS MultimediaViewerNetworkPerformanceUnioned WHERE timestamp IS NOT NULL AND event_type = 'image' GROUP BY datestring ORDER BY datestring ASC ) imageinfo_stats USING (datestring) ) date_userinfo_imageinfo_thumbnailinfo_filerepoinfo_imageusage_globalusage_image
