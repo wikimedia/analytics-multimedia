@@ -1,7 +1,9 @@
 SELECT * FROM ( SELECT * FROM ( SELECT * FROM ( SELECT * FROM ( SELECT * FROM ( SELECT * FROM ( SELECT * FROM ( SELECT * FROM ( SELECT * FROM ( SELECT * FROM (SELECT concat(substring(timestamp, 1, 4), '-', substring(timestamp, 5, 2), '-', substring(timestamp, 7, 2)) AS datestring FROM (
-SELECT * FROM MultimediaViewerNetworkPerformance_7393226
+SELECT datestring FROM MultimediaViewerNetworkPerformance_7393226
 UNION ALL
-SELECT * FROM MultimediaViewerNetworkPerformance_7488625
+SELECT datestring FROM MultimediaViewerNetworkPerformance_7488625
+UNION ALL
+SELECT datestring FROM MultimediaViewerNetworkPerformance_7917896
 ) AS MultimediaViewerNetworkPerformanceUnioned WHERE timestamp IS NOT NULL GROUP BY datestring ORDER BY datestring ASC) dates
 
 LEFT OUTER JOIN
@@ -13,6 +15,8 @@ COUNT(*) AS userinfo_sample_size FROM (
 SELECT event_type, event_total, timestamp, wiki FROM MultimediaViewerNetworkPerformance_7393226
 UNION ALL
 SELECT event_type, event_total, timestamp, wiki FROM MultimediaViewerNetworkPerformance_7488625
+UNION ALL
+SELECT event_type, event_total, timestamp, wiki FROM MultimediaViewerNetworkPerformance_7917896
 ) AS MultimediaViewerNetworkPerformanceUnioned WHERE  timestamp IS NOT NULL AND event_type = 'userinfo' GROUP BY datestring ORDER BY datestring ASC ) userinfo_stats USING (datestring) ) date_userinfo
 
 LEFT OUTER JOIN
@@ -24,6 +28,8 @@ COUNT(*) AS imageinfo_sample_size FROM (
 SELECT event_type, event_total, timestamp, wiki FROM MultimediaViewerNetworkPerformance_7393226
 UNION ALL
 SELECT event_type, event_total, timestamp, wiki FROM MultimediaViewerNetworkPerformance_7488625
+UNION ALL
+SELECT event_type, event_total, timestamp, wiki FROM MultimediaViewerNetworkPerformance_7917896
 ) AS MultimediaViewerNetworkPerformanceUnioned WHERE  timestamp IS NOT NULL AND event_type = 'imageinfo' GROUP BY datestring ORDER BY datestring ASC ) imageinfo_stats USING (datestring) ) date_userinfo_imageinfo
 
 LEFT OUTER JOIN
@@ -35,6 +41,8 @@ COUNT(*) AS thumbnailinfo_sample_size FROM (
 SELECT event_type, event_total, timestamp, wiki FROM MultimediaViewerNetworkPerformance_7393226
 UNION ALL
 SELECT event_type, event_total, timestamp, wiki FROM MultimediaViewerNetworkPerformance_7488625
+UNION ALL
+SELECT event_type, event_total, timestamp, wiki FROM MultimediaViewerNetworkPerformance_7917896
 ) AS MultimediaViewerNetworkPerformanceUnioned WHERE  timestamp IS NOT NULL AND event_type = 'thumbnailinfo' GROUP BY datestring ORDER BY datestring ASC ) thumbnailinfo_stats USING (datestring) ) date_userinfo_imageinfo_thumbnailinfo
 
 LEFT OUTER JOIN
@@ -46,6 +54,8 @@ COUNT(*) AS filerepoinfo_sample_size FROM (
 SELECT event_type, event_total, timestamp, wiki FROM MultimediaViewerNetworkPerformance_7393226
 UNION ALL
 SELECT event_type, event_total, timestamp, wiki FROM MultimediaViewerNetworkPerformance_7488625
+UNION ALL
+SELECT event_type, event_total, timestamp, wiki FROM MultimediaViewerNetworkPerformance_7917896
 ) AS MultimediaViewerNetworkPerformanceUnioned WHERE  timestamp IS NOT NULL AND event_type = 'filerepoinfo' GROUP BY datestring ORDER BY datestring ASC ) filerepoinfo_stats USING (datestring) ) date_userinfo_imageinfo_thumbnailinfo_filerepoinfo
 
 LEFT OUTER JOIN
@@ -57,6 +67,8 @@ COUNT(*) AS imageusage_sample_size FROM (
 SELECT event_type, event_total, timestamp, wiki FROM MultimediaViewerNetworkPerformance_7393226
 UNION ALL
 SELECT event_type, event_total, timestamp, wiki FROM MultimediaViewerNetworkPerformance_7488625
+UNION ALL
+SELECT event_type, event_total, timestamp, wiki FROM MultimediaViewerNetworkPerformance_7917896
 ) AS MultimediaViewerNetworkPerformanceUnioned WHERE  timestamp IS NOT NULL AND event_type = 'imageusage' GROUP BY datestring ORDER BY datestring ASC ) imageusage_stats USING (datestring) ) date_userinfo_imageinfo_thumbnailinfo_filerepoinfo_imageusage
 
 LEFT OUTER JOIN
@@ -68,6 +80,8 @@ COUNT(*) AS globalusage_sample_size FROM (
 SELECT event_type, event_total, timestamp, wiki FROM MultimediaViewerNetworkPerformance_7393226
 UNION ALL
 SELECT event_type, event_total, timestamp, wiki FROM MultimediaViewerNetworkPerformance_7488625
+UNION ALL
+SELECT event_type, event_total, timestamp, wiki FROM MultimediaViewerNetworkPerformance_7917896
 ) AS MultimediaViewerNetworkPerformanceUnioned WHERE  timestamp IS NOT NULL AND event_type = 'globalusage' GROUP BY datestring ORDER BY datestring ASC ) globalusage_stats USING (datestring) ) date_userinfo_imageinfo_thumbnailinfo_filerepoinfo_imageusage_globalusage
 
 LEFT OUTER JOIN
@@ -79,6 +93,8 @@ COUNT(*) AS image_sample_size FROM (
 SELECT event_type, event_total, timestamp, wiki FROM MultimediaViewerNetworkPerformance_7393226
 UNION ALL
 SELECT event_type, event_total, timestamp, wiki FROM MultimediaViewerNetworkPerformance_7488625
+UNION ALL
+SELECT event_type, event_total, timestamp, wiki FROM MultimediaViewerNetworkPerformance_7917896
 ) AS MultimediaViewerNetworkPerformanceUnioned WHERE  timestamp IS NOT NULL AND event_type = 'image' GROUP BY datestring ORDER BY datestring ASC ) image_stats USING (datestring) ) date_userinfo_imageinfo_thumbnailinfo_filerepoinfo_imageusage_globalusage_image
 
 LEFT OUTER JOIN
@@ -90,6 +106,8 @@ COUNT(*) AS imagemiss_sample_size FROM (
 SELECT event_type, event_total, timestamp, wiki, event_XCache, event_varnish1hits, event_varnish2hits, event_varnish3hits FROM MultimediaViewerNetworkPerformance_7393226
 UNION ALL
 SELECT event_type, event_total, timestamp, wiki, event_XCache, event_varnish1hits, event_varnish2hits, event_varnish3hits FROM MultimediaViewerNetworkPerformance_7488625
+UNION ALL
+SELECT event_type, event_total, timestamp, wiki, event_XCache, event_varnish1hits, event_varnish2hits, event_varnish3hits FROM MultimediaViewerNetworkPerformance_7917896
 ) AS MultimediaViewerNetworkPerformanceUnioned WHERE  timestamp IS NOT NULL AND LENGTH(event_XCache) > 0 AND event_varnish1hits = 0 AND event_varnish2hits = 0 AND event_varnish2hits = 0 AND event_type = 'image' GROUP BY datestring ORDER BY datestring ASC ) imagemiss_stats USING (datestring) ) date_userinfo_imageinfo_thumbnailinfo_filerepoinfo_imageusage_globalusage_image_imagemiss
 
 LEFT OUTER JOIN
@@ -101,4 +119,6 @@ COUNT(*) AS imagehit_sample_size FROM (
 SELECT event_type, event_total, timestamp, wiki, event_XCache, event_varnish1hits, event_varnish2hits, event_varnish3hits FROM MultimediaViewerNetworkPerformance_7393226
 UNION ALL
 SELECT event_type, event_total, timestamp, wiki, event_XCache, event_varnish1hits, event_varnish2hits, event_varnish3hits FROM MultimediaViewerNetworkPerformance_7488625
+UNION ALL
+SELECT event_type, event_total, timestamp, wiki, event_XCache, event_varnish1hits, event_varnish2hits, event_varnish3hits FROM MultimediaViewerNetworkPerformance_7917896
 ) AS MultimediaViewerNetworkPerformanceUnioned WHERE  timestamp IS NOT NULL AND LENGTH(event_XCache) > 0 AND (event_varnish1hits > 0 OR event_varnish2hits > 0 OR event_varnish2hits > 0) AND event_type = 'image' GROUP BY datestring ORDER BY datestring ASC ) imagehit_stats USING (datestring) ) date_userinfo_imageinfo_thumbnailinfo_filerepoinfo_imageusage_globalusage_image_imagehit
