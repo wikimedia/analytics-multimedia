@@ -1,9 +1,9 @@
 SELECT * FROM ( SELECT * FROM ( SELECT * FROM ( SELECT * FROM ( SELECT * FROM ( SELECT * FROM ( SELECT * FROM ( SELECT * FROM ( SELECT * FROM ( SELECT * FROM (SELECT concat(substring(timestamp, 1, 4), '-', substring(timestamp, 5, 2), '-', substring(timestamp, 7, 2)) AS datestring FROM (
-SELECT datestring FROM MultimediaViewerNetworkPerformance_7393226
+SELECT timestamp FROM MultimediaViewerNetworkPerformance_7393226
 UNION ALL
-SELECT datestring FROM MultimediaViewerNetworkPerformance_7488625
+SELECT timestamp FROM MultimediaViewerNetworkPerformance_7488625
 UNION ALL
-SELECT datestring FROM MultimediaViewerNetworkPerformance_7917896
+SELECT timestamp FROM MultimediaViewerNetworkPerformance_7917896
 ) AS MultimediaViewerNetworkPerformanceUnioned WHERE timestamp IS NOT NULL GROUP BY datestring ORDER BY datestring ASC) dates
 
 LEFT OUTER JOIN
