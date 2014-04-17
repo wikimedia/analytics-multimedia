@@ -1,4 +1,4 @@
-SELECT event_country as country, AVG(event_total) as mean, STD(event_total) as std, COUNT(event_total) as sample_size FROM (
+SELECT event_country as country, EXP(AVG(LOG(event_total))) as mean, EXP(STD(LOG(event_total))) as std, COUNT(event_total) as sample_size FROM (
 SELECT timestamp, event_total, event_country, event_type FROM MultimediaViewerNetworkPerformance_7393226
 UNION ALL
 SELECT timestamp, event_total, event_country, event_type FROM MultimediaViewerNetworkPerformance_7488625

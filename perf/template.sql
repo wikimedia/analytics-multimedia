@@ -9,8 +9,8 @@ SELECT timestamp FROM MultimediaViewerNetworkPerformance_7917896
 LEFT OUTER JOIN
 
 ( SELECT concat(substring(timestamp, 1, 4), '-', substring(timestamp, 5, 2), '-', substring(timestamp, 7, 2)) AS datestring,
-AVG(event_total) AS userinfo_time_mean,
-STD(event_total) AS userinfo_time_std,
+EXP(AVG(LOG(event_total))) AS userinfo_time_mean,
+EXP(STD(LOG(event_total))) AS userinfo_time_std,
 COUNT(*) AS userinfo_sample_size FROM (
 SELECT event_type, event_total, timestamp, wiki FROM MultimediaViewerNetworkPerformance_7393226
 UNION ALL
@@ -22,8 +22,8 @@ SELECT event_type, event_total, timestamp, wiki FROM MultimediaViewerNetworkPerf
 LEFT OUTER JOIN
 
 ( SELECT concat(substring(timestamp, 1, 4), '-', substring(timestamp, 5, 2), '-', substring(timestamp, 7, 2)) AS datestring,
-AVG(event_total) AS imageinfo_time_mean,
-STD(event_total) AS imageinfo_time_std,
+EXP(AVG(LOG(event_total))) AS imageinfo_time_mean,
+EXP(STD(LOG(event_total))) AS imageinfo_time_std,
 COUNT(*) AS imageinfo_sample_size FROM (
 SELECT event_type, event_total, timestamp, wiki FROM MultimediaViewerNetworkPerformance_7393226
 UNION ALL
@@ -35,8 +35,8 @@ SELECT event_type, event_total, timestamp, wiki FROM MultimediaViewerNetworkPerf
 LEFT OUTER JOIN
 
 ( SELECT concat(substring(timestamp, 1, 4), '-', substring(timestamp, 5, 2), '-', substring(timestamp, 7, 2)) AS datestring,
-AVG(event_total) AS thumbnailinfo_time_mean,
-STD(event_total) AS thumbnailinfo_time_std,
+EXP(AVG(LOG(event_total))) AS thumbnailinfo_time_mean,
+EXP(STD(LOG(event_total))) AS thumbnailinfo_time_std,
 COUNT(*) AS thumbnailinfo_sample_size FROM (
 SELECT event_type, event_total, timestamp, wiki FROM MultimediaViewerNetworkPerformance_7393226
 UNION ALL
@@ -48,8 +48,8 @@ SELECT event_type, event_total, timestamp, wiki FROM MultimediaViewerNetworkPerf
 LEFT OUTER JOIN
 
 ( SELECT concat(substring(timestamp, 1, 4), '-', substring(timestamp, 5, 2), '-', substring(timestamp, 7, 2)) AS datestring,
-AVG(event_total) AS filerepoinfo_time_mean,
-STD(event_total) AS filerepoinfo_time_std,
+EXP(AVG(LOG(event_total))) AS filerepoinfo_time_mean,
+EXP(STD(LOG(event_total))) AS filerepoinfo_time_std,
 COUNT(*) AS filerepoinfo_sample_size FROM (
 SELECT event_type, event_total, timestamp, wiki FROM MultimediaViewerNetworkPerformance_7393226
 UNION ALL
@@ -61,8 +61,8 @@ SELECT event_type, event_total, timestamp, wiki FROM MultimediaViewerNetworkPerf
 LEFT OUTER JOIN
 
 ( SELECT concat(substring(timestamp, 1, 4), '-', substring(timestamp, 5, 2), '-', substring(timestamp, 7, 2)) AS datestring,
-AVG(event_total) AS imageusage_time_mean,
-STD(event_total) AS imageusage_time_std,
+EXP(AVG(LOG(event_total))) AS imageusage_time_mean,
+EXP(STD(LOG(event_total))) AS imageusage_time_std,
 COUNT(*) AS imageusage_sample_size FROM (
 SELECT event_type, event_total, timestamp, wiki FROM MultimediaViewerNetworkPerformance_7393226
 UNION ALL
@@ -74,8 +74,8 @@ SELECT event_type, event_total, timestamp, wiki FROM MultimediaViewerNetworkPerf
 LEFT OUTER JOIN
 
 ( SELECT concat(substring(timestamp, 1, 4), '-', substring(timestamp, 5, 2), '-', substring(timestamp, 7, 2)) AS datestring,
-AVG(event_total) AS globalusage_time_mean,
-STD(event_total) AS globalusage_time_std,
+EXP(AVG(LOG(event_total))) AS globalusage_time_mean,
+EXP(STD(LOG(event_total))) AS globalusage_time_std,
 COUNT(*) AS globalusage_sample_size FROM (
 SELECT event_type, event_total, timestamp, wiki FROM MultimediaViewerNetworkPerformance_7393226
 UNION ALL
@@ -87,8 +87,8 @@ SELECT event_type, event_total, timestamp, wiki FROM MultimediaViewerNetworkPerf
 LEFT OUTER JOIN
 
 ( SELECT concat(substring(timestamp, 1, 4), '-', substring(timestamp, 5, 2), '-', substring(timestamp, 7, 2)) AS datestring,
-AVG(event_total) AS image_time_mean,
-STD(event_total) AS image_time_std,
+EXP(AVG(LOG(event_total))) AS image_time_mean,
+EXP(STD(LOG(event_total))) AS image_time_std,
 COUNT(*) AS image_sample_size FROM (
 SELECT event_type, event_total, timestamp, wiki FROM MultimediaViewerNetworkPerformance_7393226
 UNION ALL
@@ -100,8 +100,8 @@ SELECT event_type, event_total, timestamp, wiki FROM MultimediaViewerNetworkPerf
 LEFT OUTER JOIN
 
 ( SELECT concat(substring(timestamp, 1, 4), '-', substring(timestamp, 5, 2), '-', substring(timestamp, 7, 2)) AS datestring,
-AVG(event_total) AS imagemiss_time_mean,
-STD(event_total) AS imagemiss_time_std,
+EXP(AVG(LOG(event_total))) AS imagemiss_time_mean,
+EXP(STD(LOG(event_total))) AS imagemiss_time_std,
 COUNT(*) AS imagemiss_sample_size FROM (
 SELECT event_type, event_total, timestamp, wiki, event_XCache, event_varnish1hits, event_varnish2hits, event_varnish3hits FROM MultimediaViewerNetworkPerformance_7393226
 UNION ALL
@@ -113,8 +113,8 @@ SELECT event_type, event_total, timestamp, wiki, event_XCache, event_varnish1hit
 LEFT OUTER JOIN
 
 ( SELECT concat(substring(timestamp, 1, 4), '-', substring(timestamp, 5, 2), '-', substring(timestamp, 7, 2)) AS datestring,
-AVG(event_total) AS imagehit_time_mean,
-STD(event_total) AS imagehit_time_std,
+EXP(AVG(LOG(event_total))) AS imagehit_time_mean,
+EXP(STD(LOG(event_total))) AS imagehit_time_std,
 COUNT(*) AS imagehit_sample_size FROM (
 SELECT event_type, event_total, timestamp, wiki, event_XCache, event_varnish1hits, event_varnish2hits, event_varnish3hits FROM MultimediaViewerNetworkPerformance_7393226
 UNION ALL
