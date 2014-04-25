@@ -1,6 +1,27 @@
 <?php
 
-$wikis = array( 'global', 'huwiki', 'frwiki', 'enwiki', 'mediawikiwiki', 'commonswiki' );
+$wikis = array(
+	'global',
+	'huwiki',
+	'frwiki',
+	'enwiki',
+	'mediawikiwiki',
+	'commonswiki',
+	'cawiki',
+	'dewiki',
+	'hewiki',
+	'kowiki',
+	'plwiki',
+	'ptwiki',
+	'enwikivoyage',
+	'czwiki',
+	'etwiki',
+	'fiwki',
+	'rowiki',
+	'skwiki',
+	'thwiki',
+	'viwiki',
+);
 
 $default_fields = 'event_type, event_total, timestamp, wiki';
 
