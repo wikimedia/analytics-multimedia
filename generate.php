@@ -16,7 +16,7 @@ $wikis = array(
 	'enwikivoyage',
 	'czwiki',
 	'etwiki',
-	'fiwki',
+	'fiwiki',
 	'rowiki',
 	'skwiki',
 	'thwiki',

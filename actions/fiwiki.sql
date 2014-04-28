@@ -33,7 +33,7 @@ SELECT CONCAT(SUBSTRING(timestamp, 1, 4), '-', SUBSTRING(timestamp, 5, 2), '-', 
 			UNION ALL
 		SELECT timestamp, wiki, event_action FROM MediaViewer_8245578) AS MediaViewerUnioned
 
-	WHERE wiki = 'fiwki' AND timestamp >= TIMESTAMP(DATE_SUB(NOW(), INTERVAL 30 DAY))
+	WHERE wiki = 'fiwiki' AND timestamp >= TIMESTAMP(DATE_SUB(NOW(), INTERVAL 30 DAY))
 
 	GROUP BY datestring
 	ORDER BY  datestring ASC;

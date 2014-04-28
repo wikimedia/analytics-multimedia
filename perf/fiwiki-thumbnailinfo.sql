@@ -10,24 +10,24 @@ SELECT timestamp FROM MultimediaViewerNetworkPerformance_7917896
 LEFT OUTER JOIN
 
 ( SELECT concat(substring(timestamp, 1, 4), '-', substring(timestamp, 5, 2), '-', substring(timestamp, 7, 2)) AS datestring,
-EXP(AVG(LOG(event_total))) AS imageusage_time_mean,
-EXP(STD(LOG(event_total))) AS imageusage_time_std,
-COUNT(*) AS imageusage_sample_size,
+EXP(AVG(LOG(event_total))) AS thumbnailinfo_time_mean,
+EXP(STD(LOG(event_total))) AS thumbnailinfo_time_std,
+COUNT(*) AS thumbnailinfo_sample_size,
 CAST(SUBSTRING_INDEX(SUBSTRING_INDEX(
   GROUP_CONCAT(event_total ORDER BY event_total SEPARATOR ','),
-   ',', 1/100 * COUNT(*) + 1), ',', -1) AS DECIMAL) AS imageusage_time_1st_percentile,
+   ',', 1/100 * COUNT(*) + 1), ',', -1) AS DECIMAL) AS thumbnailinfo_time_1st_percentile,
 CAST(SUBSTRING_INDEX(SUBSTRING_INDEX(
   GROUP_CONCAT(event_total ORDER BY event_total SEPARATOR ','),
-   ',', 50/100 * COUNT(*) + 1), ',', -1) AS DECIMAL) AS imageusage_time_50th_percentile,
+   ',', 50/100 * COUNT(*) + 1), ',', -1) AS DECIMAL) AS thumbnailinfo_time_50th_percentile,
 CAST(SUBSTRING_INDEX(SUBSTRING_INDEX(
   GROUP_CONCAT(event_total ORDER BY event_total SEPARATOR ','),
-   ',', 90/100 * COUNT(*) + 1), ',', -1) AS DECIMAL) AS imageusage_time_90th_percentile,
+   ',', 90/100 * COUNT(*) + 1), ',', -1) AS DECIMAL) AS thumbnailinfo_time_90th_percentile,
 CAST(SUBSTRING_INDEX(SUBSTRING_INDEX(
   GROUP_CONCAT(event_total ORDER BY event_total SEPARATOR ','),
-   ',', 99/100 * COUNT(*) + 1), ',', -1) AS DECIMAL) AS imageusage_time_99th_percentile FROM (
+   ',', 99/100 * COUNT(*) + 1), ',', -1) AS DECIMAL) AS thumbnailinfo_time_99th_percentile FROM (
 SELECT event_type, event_total, timestamp, wiki FROM MultimediaViewerNetworkPerformance_7393226
 UNION ALL
 SELECT event_type, event_total, timestamp, wiki FROM MultimediaViewerNetworkPerformance_7488625
 UNION ALL
 SELECT event_type, event_total, timestamp, wiki FROM MultimediaViewerNetworkPerformance_7917896
-) AS MultimediaViewerNetworkPerformanceUnioned WHERE wiki = 'fiwki' AND timestamp >= TIMESTAMP(DATE_SUB(NOW(), INTERVAL 30 DAY)) AND event_type = 'imageusage' GROUP BY datestring ORDER BY datestring ASC ) stats USING (datestring)
+) AS MultimediaViewerNetworkPerformanceUnioned WHERE wiki = 'fiwiki' AND timestamp >= TIMESTAMP(DATE_SUB(NOW(), INTERVAL 30 DAY)) AND event_type = 'thumbnailinfo' GROUP BY datestring ORDER BY datestring ASC ) stats USING (datestring)
