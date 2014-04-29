@@ -1,35 +1,30 @@
 #!/usr/bin/env bash
 
 MYSQL_CMD="mysql --defaults-file=~/.my.cnf.relevant log"
-SQL_DIR="/home/mholmquist/multimedia/perf"
+SQL_DIR="/home/mholmquist/multimedia/geoperf"
 TSV_DIR="/home/mholmquist/tsvs_new"
 PUBLIC_DIR="/a/public-datasets/all/multimedia"
 
-echo "Updating global perf data..."
+echo "Updating global geo perf data..."
 for sqlfilepath in `ls $SQL_DIR/global-*.sql`; do
         statname=`basename $sqlfilepath | sed "s/global-//" | sed "s/.sql//"`
         echo "  $statname..."
         tsvpath=$TSV_DIR/mvp_global-$statname.tsv
         $MYSQL_CMD < $sqlfilepath > $tsvpath
-        mv $tsvpath $PUBLIC_DIR/media-viewer-perf-global-$statname.tsv
+        mv $tsvpath $PUBLIC_DIR/media-viewer-geoperf-global-$statname.tsv
 done
 echo "  Done!"
 
 for sqlpath in `ls $SQL_DIR/*-filerepoinfo.sql | grep -v template.sql`; do
         wikiname=`basename $sqlpath | sed "s/-filerepoinfo.sql//"`
-        echo "Updating perf data for $wikiname wiki..."
+        echo "Updating geo perf data for $wikiname wiki..."
 
         for sqlfilepath in `ls $SQL_DIR/${wikiname}-*.sql`; do
                 statname=`basename $sqlfilepath | sed "s/.*-//" | sed "s/.sql//"`
                 echo "  $statname..."
                 tsvpath=$TSV_DIR/mvp_$wikiname-$statname.tsv
                 $MYSQL_CMD < $sqlfilepath > $tsvpath
-                mv $tsvpath $PUBLIC_DIR/media-viewer-perf-$wikiname-$statname.tsv
+                mv $tsvpath $PUBLIC_DIR/media-viewer-geoperf-$wikiname-$statname.tsv
         done
         echo "  Done!"
 done
-
-echo "Updating mmv-versus-filepage perf data..."
-tsvpath="$TSV_DIR/mvp_mmv_versus_filepage.tsv"
-$MYSQL_CMD < $SQL_DIR/mmv-versus-filepage.sql > $tsvpath && mv $tsvpath $PUBLIC_DIR/media-viewer-perf-mmv-versus-filepage.tsv
-echo "  Done!"

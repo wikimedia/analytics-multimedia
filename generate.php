@@ -42,7 +42,12 @@ $perf_metrics = array(
 	array( 'name' => 'image', 'where' => 'event_type = \'image\'', 'fields' => $default_fields ),
 	array( 'name' => 'imagemiss', 'where' => 'event_type = \'image\' AND LENGTH(event_XCache) > 0 AND event_varnish1hits = 0 AND event_varnish2hits = 0 AND event_varnish2hits = 0', 'fields' => 'event_type, event_total, timestamp, wiki, event_XCache, event_varnish1hits, event_varnish2hits, event_varnish3hits' ),
 	array( 'name' => 'imagehit', 'where' => 'event_type = \'image\' AND LENGTH(event_XCache) > 0 AND (event_varnish1hits > 0 OR event_varnish2hits > 0 OR event_varnish2hits > 0)', 'fields' => 'event_type, event_total, timestamp, wiki, event_XCache, event_varnish1hits, event_varnish2hits, event_varnish3hits' ),
-	);
+);
+
+$geo_perf_metrics = array (
+	array( 'name' => 'api', 'where' => 'event_type != \'image\'' ),
+	array( 'name' => 'image', 'where' => 'event_type = \'image\'' )
+);
 
 function generate( $folder, $wiki, $metric = null ) {
 	$replacement = '';
@@ -66,6 +71,10 @@ function generate( $folder, $wiki, $metric = null ) {
 foreach ( $wikis as $wiki ) {
 	foreach ( $perf_metrics as $perf_metric) {
 		generate( 'perf', $wiki, $perf_metric );
+	}
+
+	foreach ( $geo_perf_metrics as $perf_metric) {
+		generate( 'geoperf', $wiki, $perf_metric );
 	}
 
 	generate( 'actions', $wiki );
