@@ -16,8 +16,8 @@ for sqlfilepath in `ls $SQL_DIR/global-*.sql`; do
 done
 echo "  Done!"
 
-for sqlpath in `ls $SQL_DIR/*-filerepoinfo.sql | grep -v template.sql`; do
-        wikiname=`basename $sqlpath | sed "s/-filerepoinfo.sql//"`
+for sqlpath in `ls $SQL_DIR/*-image.sql | grep -v template.sql`; do
+        wikiname=`basename $sqlpath | sed "s/-image.sql//"`
         echo "Updating geo perf data for $wikiname wiki..."
 
         for sqlfilepath in `ls $SQL_DIR/${wikiname}-*.sql`; do
