@@ -1,8 +1,9 @@
 #!/usr/bin/env bash
 
+REMOTEUSER="marktraceur"
 MYSQL_CMD="mysql --defaults-file=~/.my.cnf.relevant log"
-SQL_DIR="/home/mholmquist/multimedia/actions"
-TSV_DIR="/home/mholmquist/tsvs_new"
+SQL_DIR="/home/$REMOTEUSER/multimedia/actions"
+TSV_DIR="/home/$REMOTEUSER/tsvs_new"
 PUBLIC_DIR="/a/public-datasets/all/multimedia"
 
 echo "Updating global action counts..."
