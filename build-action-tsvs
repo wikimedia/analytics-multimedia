@@ -1,0 +1,19 @@
+#!/usr/bin/env bash
+
+MYSQL_CMD="mysql --defaults-file=~/.my.cnf.relevant log"
+SQL_DIR="/home/mholmquist/multimedia/actions"
+TSV_DIR="/home/mholmquist/tsvs_new"
+PUBLIC_DIR="/a/public-datasets/all/multimedia"
+
+echo "Updating global action counts..."
+globaltsvpath="$TSV_DIR/mv_global.tsv"
+$MYSQL_CMD < $SQL_DIR/global.sql > $globaltsvpath && mv $globaltsvpath $PUBLIC_DIR/media-viewer-actions-global.tsv
+
+for sqlpath in `ls $SQL_DIR/*.sql | grep -v template.sql`; do
+        wikiname=`basename $sqlpath | sed "s/.sql//"`
+        echo "Updating action counts for $wikiname wiki..."
+        tsvpath=$TSV_DIR/mv_$wikiname.tsv
+        $MYSQL_CMD < $sqlpath > $tsvpath
+        mv $tsvpath $PUBLIC_DIR/media-viewer-actions-$wikiname.tsv
+done
+

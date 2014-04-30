@@ -1,0 +1,54 @@
+#!/usr/bin/env bash
+
+MYSQL_CMD="mysql --defaults-file=~/.my.cnf.relevant log"
+SQL_DIR="/home/mholmquist/multimedia/perf"
+TSV_DIR="/home/mholmquist/tsvs_new"
+PUBLIC_DIR="/a/public-datasets/all/multimedia"
+
+echo "Updating global perf data..."
+for sqlfilepath in `ls $SQL_DIR/global-*.sql`; do
+        statname=`basename $sqlfilepath | sed "s/global-//" | sed "s/.sql//"`
+        echo "  $statname..."
+        tsvpath=$TSV_DIR/mvp_global-$statname.tsv
+        $MYSQL_CMD < $sqlfilepath > $tsvpath
+        mv $tsvpath $PUBLIC_DIR/media-viewer-perf-global-$statname.tsv
+done
+echo "  Done!"
+
+echo "Updating country-api perf data..."
+tsvpath="$TSV_DIR/mvp_country_api.tsv"
+$MYSQL_CMD < $SQL_DIR/country-api.sql > $tsvpath && mv $tsvpath $PUBLIC_DIR/media-viewer-perf-country-api.tsv
+
+echo "Updating country-image perf data..."
+tsvpath="$TSV_DIR/mvp_country_image.tsv"
+$MYSQL_CMD < $SQL_DIR/country-image.sql > $tsvpath && mv $tsvpath $PUBLIC_DIR/media-viewer-perf-country-image.tsv
+
+echo "Updating mmv-versus-filepage perf data..."
+tsvpath="$TSV_DIR/mvp_mmv_versus_filepage.tsv"
+$MYSQL_CMD < $SQL_DIR/mmv-versus-filepage.sql > $tsvpath && mv $tsvpath $PUBLIC_DIR/media-viewer-perf-mmv-versus-filepage.tsv
+
+echo "Updating per-site perf data..."
+for sqlpath in `ls $SQL_DIR/*-filerepoinfo.sql | grep -v template.sql`; do
+        wikiname=`basename $sqlpath | sed "s/-filerepoinfo.sql//"`
+        echo "Updating perf data for $wikiname wiki..."
+
+        for sqlfilepath in `ls $SQL_DIR/${wikiname}-*.sql`; do
+                statname=`basename $sqlfilepath | sed "s/.*-//" | sed "s/.sql//"`
+                echo "  $statname..."
+                tsvpath=$TSV_DIR/mvp_$wikiname-$statname.tsv
+                $MYSQL_CMD < $sqlfilepath > $tsvpath
+                mv $tsvpath $PUBLIC_DIR/media-viewer-perf-$wikiname-$statname.tsv
+        done
+        echo "  Done!"
+done
+
+SQL_DIR="/home/mholmquist/multimedia/oldperf"
+
+for sqlpath in `ls $SQL_DIR/*.sql | grep -v template.sql`; do
+        wikiname=`basename $sqlpath | sed "s/.sql//"`
+        echo "Updating old-style perf data for $wikiname wiki..."
+        tsvpath=$TSV_DIR/mvp_$wikiname.tsv
+        $MYSQL_CMD < $sqlpath > $tsvpath
+        mv $tsvpath $PUBLIC_DIR/media-viewer-oldperf-$wikiname.tsv
+done
+
