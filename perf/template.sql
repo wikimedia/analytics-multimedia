@@ -24,6 +24,9 @@ CAST(SUBSTRING_INDEX(SUBSTRING_INDEX(
    ',', 90/100 * COUNT(*) + 1), ',', -1) AS DECIMAL) AS %metricname%_time_90th_percentile,
 CAST(SUBSTRING_INDEX(SUBSTRING_INDEX(
   GROUP_CONCAT(event_total ORDER BY event_total SEPARATOR ','),
+   ',', 95/100 * COUNT(*) + 1), ',', -1) AS DECIMAL) AS %metricname%_time_95th_percentile,
+CAST(SUBSTRING_INDEX(SUBSTRING_INDEX(
+  GROUP_CONCAT(event_total ORDER BY event_total SEPARATOR ','),
    ',', 99/100 * COUNT(*) + 1), ',', -1) AS DECIMAL) AS %metricname%_time_99th_percentile FROM (
 SELECT %metricfields% FROM MultimediaViewerNetworkPerformance_7393226
 UNION ALL

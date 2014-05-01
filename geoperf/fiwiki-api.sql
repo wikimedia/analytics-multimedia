@@ -14,6 +14,9 @@ CAST(SUBSTRING_INDEX(SUBSTRING_INDEX(
    ',', 90/100 * COUNT(*) + 1), ',', -1) AS DECIMAL) AS 90th_percentile,
 CAST(SUBSTRING_INDEX(SUBSTRING_INDEX(
   GROUP_CONCAT(event_total ORDER BY event_total SEPARATOR ','),
+   ',', 95/100 * COUNT(*) + 1), ',', -1) AS DECIMAL) AS 95th_percentile,
+CAST(SUBSTRING_INDEX(SUBSTRING_INDEX(
+  GROUP_CONCAT(event_total ORDER BY event_total SEPARATOR ','),
    ',', 99/100 * COUNT(*) + 1), ',', -1) AS DECIMAL) AS 99th_percentile
 FROM (
 SELECT timestamp, event_total, event_country, event_type, wiki FROM MultimediaViewerNetworkPerformance_7393226
