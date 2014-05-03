@@ -19,9 +19,7 @@ CAST(SUBSTRING_INDEX(SUBSTRING_INDEX(
   GROUP_CONCAT(event_total ORDER BY event_total SEPARATOR ','),
    ',', 99/100 * COUNT(*) + 1), ',', -1) AS DECIMAL) AS 99th_percentile
 FROM (
-SELECT timestamp, event_total, event_country, event_type, wiki FROM MultimediaViewerNetworkPerformance_7393226
-UNION ALL
 SELECT timestamp, event_total, event_country, event_type, wiki FROM MultimediaViewerNetworkPerformance_7488625
 UNION ALL
 SELECT timestamp, event_total, event_country, event_type, wiki FROM MultimediaViewerNetworkPerformance_7917896
-) MultimediaViewerNetworkPerformanceUnioned WHERE wiki = 'thwiki' AND event_type = 'image' AND timestamp >= TIMESTAMP(DATE_SUB(NOW(), INTERVAL 10 DAY)) AND event_country != '' GROUP BY country HAVING sample_size > 10 ORDER BY mean ASC
+) MultimediaViewerNetworkPerformanceUnioned WHERE wiki = 'thwiki' AND event_type = 'image' AND timestamp < TIMESTAMP(CURDATE()) AND timestamp >= TIMESTAMP(DATE_SUB(CURDATE(), INTERVAL 10 DAY)) AND event_country != '' GROUP BY country HAVING sample_size > 10 ORDER BY mean ASC

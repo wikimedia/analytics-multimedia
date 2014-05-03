@@ -23,17 +23,9 @@ SELECT CONCAT(SUBSTRING(timestamp, 1, 4), '-', SUBSTRING(timestamp, 5, 2), '-', 
 	FROM (
 		SELECT timestamp, wiki, event_action FROM MediaViewer_7670440
 			UNION ALL
-		SELECT timestamp, wiki, event_action FROM MediaViewer_6636420
-			UNION ALL
-		SELECT timestamp, wiki, event_action FROM MediaViewer_6066908
-			UNION ALL
-		SELECT timestamp, wiki, event_action FROM MediaViewer_6055641
-			UNION ALL
-		SELECT timestamp, wiki, event_action FROM MediaViewer_6054199
-			UNION ALL
 		SELECT timestamp, wiki, event_action FROM MediaViewer_8245578) AS MediaViewerUnioned
 
-	WHERE wiki = 'jawiki' AND timestamp >= TIMESTAMP(DATE_SUB(NOW(), INTERVAL 30 DAY))
+	WHERE wiki = 'jawiki' AND timestamp < TIMESTAMP(CURDATE()) AND timestamp >= TIMESTAMP(DATE_SUB(CURDATE(), INTERVAL 30 DAY))
 
 	GROUP BY datestring
-	ORDER BY  datestring ASC;
+	ORDER BY datestring ASC;

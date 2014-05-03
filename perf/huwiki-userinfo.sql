@@ -5,7 +5,7 @@ UNION ALL
 SELECT timestamp FROM MultimediaViewerNetworkPerformance_7488625
 UNION ALL
 SELECT timestamp FROM MultimediaViewerNetworkPerformance_7917896
-) AS MultimediaViewerNetworkPerformanceUnioned WHERE timestamp >= TIMESTAMP(DATE_SUB(NOW(), INTERVAL 30 DAY)) GROUP BY datestring ORDER BY datestring ASC) dates
+) AS MultimediaViewerNetworkPerformanceUnioned WHERE timestamp < TIMESTAMP(CURDATE()) AND timestamp >= TIMESTAMP(DATE_SUB(CURDATE(), INTERVAL 30 DAY)) GROUP BY datestring ORDER BY datestring ASC) dates
 
 LEFT OUTER JOIN
 
@@ -28,9 +28,7 @@ CAST(SUBSTRING_INDEX(SUBSTRING_INDEX(
 CAST(SUBSTRING_INDEX(SUBSTRING_INDEX(
   GROUP_CONCAT(event_total ORDER BY event_total SEPARATOR ','),
    ',', 99/100 * COUNT(*) + 1), ',', -1) AS DECIMAL) AS userinfo_time_99th_percentile FROM (
-SELECT event_type, event_total, timestamp, wiki FROM MultimediaViewerNetworkPerformance_7393226
-UNION ALL
 SELECT event_type, event_total, timestamp, wiki FROM MultimediaViewerNetworkPerformance_7488625
 UNION ALL
 SELECT event_type, event_total, timestamp, wiki FROM MultimediaViewerNetworkPerformance_7917896
-) AS MultimediaViewerNetworkPerformanceUnioned WHERE wiki = 'huwiki' AND timestamp >= TIMESTAMP(DATE_SUB(NOW(), INTERVAL 30 DAY)) AND event_type = 'userinfo' GROUP BY datestring ORDER BY datestring ASC ) stats USING (datestring)
+) AS MultimediaViewerNetworkPerformanceUnioned WHERE wiki = 'huwiki' AND timestamp < TIMESTAMP(CURDATE()) AND timestamp >= TIMESTAMP(DATE_SUB(CURDATE(), INTERVAL 30 DAY)) AND event_type = 'userinfo' GROUP BY datestring ORDER BY datestring ASC ) stats USING (datestring)

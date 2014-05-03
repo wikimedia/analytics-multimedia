@@ -5,7 +5,7 @@ UNION ALL
 SELECT timestamp FROM MultimediaViewerNetworkPerformance_7488625
 UNION ALL
 SELECT timestamp FROM MultimediaViewerNetworkPerformance_7917896
-) AS MultimediaViewerNetworkPerformanceUnioned WHERE timestamp >= TIMESTAMP(DATE_SUB(NOW(), INTERVAL 30 DAY)) GROUP BY datestring ORDER BY datestring ASC) dates
+) AS MultimediaViewerNetworkPerformanceUnioned WHERE timestamp < TIMESTAMP(CURDATE()) AND timestamp >= TIMESTAMP(DATE_SUB(CURDATE(), INTERVAL 30 DAY)) GROUP BY datestring ORDER BY datestring ASC) dates
 
 LEFT OUTER JOIN
 
@@ -28,9 +28,7 @@ CAST(SUBSTRING_INDEX(SUBSTRING_INDEX(
 CAST(SUBSTRING_INDEX(SUBSTRING_INDEX(
   GROUP_CONCAT(event_total ORDER BY event_total SEPARATOR ','),
    ',', 99/100 * COUNT(*) + 1), ',', -1) AS DECIMAL) AS %metricname%_time_99th_percentile FROM (
-SELECT %metricfields% FROM MultimediaViewerNetworkPerformance_7393226
-UNION ALL
 SELECT %metricfields% FROM MultimediaViewerNetworkPerformance_7488625
 UNION ALL
 SELECT %metricfields% FROM MultimediaViewerNetworkPerformance_7917896
-) AS MultimediaViewerNetworkPerformanceUnioned WHERE %wiki% timestamp >= TIMESTAMP(DATE_SUB(NOW(), INTERVAL 30 DAY)) AND %metricwhere% GROUP BY datestring ORDER BY datestring ASC ) stats USING (datestring)
+) AS MultimediaViewerNetworkPerformanceUnioned WHERE %wiki% timestamp < TIMESTAMP(CURDATE()) AND timestamp >= TIMESTAMP(DATE_SUB(CURDATE(), INTERVAL 30 DAY)) AND %metricwhere% GROUP BY datestring ORDER BY datestring ASC ) stats USING (datestring)
