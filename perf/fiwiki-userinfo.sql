@@ -31,4 +31,4 @@ CAST(SUBSTRING_INDEX(SUBSTRING_INDEX(
 SELECT event_type, event_total, timestamp, wiki FROM MultimediaViewerNetworkPerformance_7488625
 UNION ALL
 SELECT event_type, event_total, timestamp, wiki FROM MultimediaViewerNetworkPerformance_7917896
-) AS MultimediaViewerNetworkPerformanceUnioned WHERE wiki = 'fiwiki' AND timestamp < TIMESTAMP(CURDATE()) AND timestamp >= TIMESTAMP(DATE_SUB(CURDATE(), INTERVAL 30 DAY)) AND event_type = 'userinfo' GROUP BY datestring ORDER BY datestring ASC ) stats USING (datestring)
+) AS MultimediaViewerNetworkPerformanceUnioned WHERE wiki = 'fiwiki' AND timestamp < TIMESTAMP(CURDATE()) AND timestamp >= TIMESTAMP(DATE_SUB(CURDATE(), INTERVAL 30 DAY)) AND event_total > 20 AND event_type = 'userinfo' GROUP BY datestring ORDER BY datestring ASC ) stats USING (datestring)

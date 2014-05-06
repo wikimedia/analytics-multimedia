@@ -22,4 +22,4 @@ FROM (
 SELECT timestamp, event_total, event_country, event_type, wiki FROM MultimediaViewerNetworkPerformance_7488625
 UNION ALL
 SELECT timestamp, event_total, event_country, event_type, wiki FROM MultimediaViewerNetworkPerformance_7917896
-) MultimediaViewerNetworkPerformanceUnioned WHERE wiki = 'skwiki' AND event_type != 'image' AND timestamp < TIMESTAMP(CURDATE()) AND timestamp >= TIMESTAMP(DATE_SUB(CURDATE(), INTERVAL 10 DAY)) AND event_country != '' GROUP BY country HAVING sample_size > 10 ORDER BY mean ASC
+) MultimediaViewerNetworkPerformanceUnioned WHERE wiki = 'skwiki' AND event_type != 'image' AND timestamp < TIMESTAMP(CURDATE()) AND timestamp >= TIMESTAMP(DATE_SUB(CURDATE(), INTERVAL 10 DAY)) AND event_total > 20 AND event_country != '' GROUP BY country HAVING sample_size > 10 ORDER BY mean ASC

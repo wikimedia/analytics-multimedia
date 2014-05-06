@@ -31,4 +31,4 @@ CAST(SUBSTRING_INDEX(SUBSTRING_INDEX(
 SELECT event_type, event_total, timestamp, wiki, event_XCache, event_varnish1hits, event_varnish2hits, event_varnish3hits FROM MultimediaViewerNetworkPerformance_7488625
 UNION ALL
 SELECT event_type, event_total, timestamp, wiki, event_XCache, event_varnish1hits, event_varnish2hits, event_varnish3hits FROM MultimediaViewerNetworkPerformance_7917896
-) AS MultimediaViewerNetworkPerformanceUnioned WHERE wiki = 'mediawikiwiki' AND timestamp < TIMESTAMP(CURDATE()) AND timestamp >= TIMESTAMP(DATE_SUB(CURDATE(), INTERVAL 30 DAY)) AND event_type = 'image' AND LENGTH(event_XCache) > 0 AND (event_varnish1hits > 0 OR event_varnish2hits > 0 OR event_varnish2hits > 0) GROUP BY datestring ORDER BY datestring ASC ) stats USING (datestring)
+) AS MultimediaViewerNetworkPerformanceUnioned WHERE wiki = 'mediawikiwiki' AND timestamp < TIMESTAMP(CURDATE()) AND timestamp >= TIMESTAMP(DATE_SUB(CURDATE(), INTERVAL 30 DAY)) AND event_total > 20 AND event_type = 'image' AND LENGTH(event_XCache) > 0 AND (event_varnish1hits > 0 OR event_varnish2hits > 0 OR event_varnish2hits > 0) GROUP BY datestring ORDER BY datestring ASC ) stats USING (datestring)
