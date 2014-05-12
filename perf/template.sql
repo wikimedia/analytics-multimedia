@@ -5,6 +5,8 @@ UNION ALL
 SELECT timestamp FROM MultimediaViewerNetworkPerformance_7488625
 UNION ALL
 SELECT timestamp FROM MultimediaViewerNetworkPerformance_7917896
+UNION ALL
+SELECT timestamp FROM MultimediaViewerNetworkPerformance_7917896_1
 ) AS MultimediaViewerNetworkPerformanceUnioned WHERE timestamp < TIMESTAMP(CURDATE()) AND timestamp >= TIMESTAMP(DATE_SUB(CURDATE(), INTERVAL 30 DAY)) GROUP BY datestring ORDER BY datestring ASC) dates
 
 LEFT OUTER JOIN
@@ -31,4 +33,6 @@ CAST(SUBSTRING_INDEX(SUBSTRING_INDEX(
 SELECT %metricfields% FROM MultimediaViewerNetworkPerformance_7488625
 UNION ALL
 SELECT %metricfields% FROM MultimediaViewerNetworkPerformance_7917896
+UNION ALL
+SELECT %metricfields% FROM MultimediaViewerNetworkPerformance_7917896_1
 ) AS MultimediaViewerNetworkPerformanceUnioned WHERE %wiki% timestamp < TIMESTAMP(CURDATE()) AND timestamp >= TIMESTAMP(DATE_SUB(CURDATE(), INTERVAL 30 DAY)) AND event_total > 20 AND %metricwhere% GROUP BY datestring ORDER BY datestring ASC ) stats USING (datestring)
