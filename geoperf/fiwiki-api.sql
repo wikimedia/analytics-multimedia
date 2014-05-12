@@ -20,8 +20,11 @@ CAST(SUBSTRING_INDEX(SUBSTRING_INDEX(
    ',', 99/100 * COUNT(*) + 1), ',', -1) AS DECIMAL) AS 99th_percentile
 FROM (
 SELECT timestamp, event_total, event_country, event_type, wiki FROM MultimediaViewerNetworkPerformance_7488625
+WHERE wiki = 'fiwiki' AND event_type != 'image' AND timestamp < TIMESTAMP(CURDATE()) AND timestamp >= TIMESTAMP(DATE_SUB(CURDATE(), INTERVAL 10 DAY)) AND event_total > 20 AND event_country != ''
 UNION ALL
 SELECT timestamp, event_total, event_country, event_type, wiki FROM MultimediaViewerNetworkPerformance_7917896
+WHERE wiki = 'fiwiki' AND event_type != 'image' AND timestamp < TIMESTAMP(CURDATE()) AND timestamp >= TIMESTAMP(DATE_SUB(CURDATE(), INTERVAL 10 DAY)) AND event_total > 20 AND event_country != ''
 UNION ALL
 SELECT timestamp, event_total, event_country, event_type, wiki FROM MultimediaViewerNetworkPerformance_7917896_1
-) MultimediaViewerNetworkPerformanceUnioned WHERE wiki = 'fiwiki' AND event_type != 'image' AND timestamp < TIMESTAMP(CURDATE()) AND timestamp >= TIMESTAMP(DATE_SUB(CURDATE(), INTERVAL 10 DAY)) AND event_total > 20 AND event_country != '' GROUP BY country HAVING sample_size > 10 ORDER BY mean ASC
+WHERE wiki = 'fiwiki' AND event_type != 'image' AND timestamp < TIMESTAMP(CURDATE()) AND timestamp >= TIMESTAMP(DATE_SUB(CURDATE(), INTERVAL 10 DAY)) AND event_total > 20 AND event_country != ''
+) MultimediaViewerNetworkPerformanceUnioned GROUP BY country HAVING sample_size > 10 ORDER BY mean ASC
