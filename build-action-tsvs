@@ -15,6 +15,6 @@ for sqlpath in `ls $SQL_DIR/*.sql | grep -v template.sql`; do
         echo "Updating action counts for $wikiname wiki..."
         tsvpath=$TSV_DIR/mv_$wikiname.tsv
         $MYSQL_CMD < $sqlpath > $tsvpath
-        mv $tsvpath $PUBLIC_DIR/media-viewer-actions-$wikiname.tsv
+        mv -f $tsvpath $PUBLIC_DIR/media-viewer-actions-$wikiname.tsv
 done
 

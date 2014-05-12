@@ -12,7 +12,7 @@ for sqlfilepath in `ls $SQL_DIR/global-*.sql`; do
         echo "  $statname..."
         tsvpath=$TSV_DIR/mvp_global-$statname.tsv
         $MYSQL_CMD < $sqlfilepath > $tsvpath
-        mv $tsvpath $PUBLIC_DIR/media-viewer-perf-global-$statname.tsv
+        mv -f $tsvpath $PUBLIC_DIR/media-viewer-perf-global-$statname.tsv
 done
 echo "  Done!"
 
@@ -25,12 +25,12 @@ for sqlpath in `ls $SQL_DIR/*-filerepoinfo.sql | grep -v template.sql`; do
                 echo "  $statname..."
                 tsvpath=$TSV_DIR/mvp_$wikiname-$statname.tsv
                 $MYSQL_CMD < $sqlfilepath > $tsvpath
-                mv $tsvpath $PUBLIC_DIR/media-viewer-perf-$wikiname-$statname.tsv
+                mv -f $tsvpath $PUBLIC_DIR/media-viewer-perf-$wikiname-$statname.tsv
         done
         echo "  Done!"
 done
 
 echo "Updating mmv-versus-filepage perf data..."
 tsvpath="$TSV_DIR/mvp_mmv_versus_filepage.tsv"
-$MYSQL_CMD < $SQL_DIR/mmv-versus-filepage.sql > $tsvpath && mv $tsvpath $PUBLIC_DIR/media-viewer-perf-mmv-versus-filepage.tsv
+$MYSQL_CMD < $SQL_DIR/mmv-versus-filepage.sql > $tsvpath && mv -f $tsvpath $PUBLIC_DIR/media-viewer-perf-mmv-versus-filepage.tsv
 echo "  Done!"

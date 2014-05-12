@@ -12,7 +12,7 @@ for sqlfilepath in `ls $SQL_DIR/global-*.sql`; do
         echo "  $statname..."
         tsvpath=$TSV_DIR/mvp_global-$statname.tsv
         $MYSQL_CMD < $sqlfilepath > $tsvpath
-        mv $tsvpath $PUBLIC_DIR/media-viewer-geoperf-global-$statname.tsv
+        mv -f $tsvpath $PUBLIC_DIR/media-viewer-geoperf-global-$statname.tsv
 done
 echo "  Done!"
 
@@ -25,7 +25,7 @@ for sqlpath in `ls $SQL_DIR/*-image.sql | grep -v template.sql`; do
                 echo "  $statname..."
                 tsvpath=$TSV_DIR/mvp_$wikiname-$statname.tsv
                 $MYSQL_CMD < $sqlfilepath > $tsvpath
-                mv $tsvpath $PUBLIC_DIR/media-viewer-geoperf-$wikiname-$statname.tsv
+                mv -f $tsvpath $PUBLIC_DIR/media-viewer-geoperf-$wikiname-$statname.tsv
         done
         echo "  Done!"
 done
