@@ -6,10 +6,6 @@ SQL_DIR="/home/$REMOTEUSER/multimedia/actions"
 TSV_DIR="/home/$REMOTEUSER/tsvs_new"
 PUBLIC_DIR="/a/public-datasets/all/multimedia"
 
-echo "Updating global action counts..."
-globaltsvpath="$TSV_DIR/mv_global.tsv"
-$MYSQL_CMD < $SQL_DIR/global.sql > $globaltsvpath && mv $globaltsvpath $PUBLIC_DIR/media-viewer-actions-global.tsv
-
 for sqlpath in `ls $SQL_DIR/*.sql | grep -v template.sql`; do
         wikiname=`basename $sqlpath | sed "s/.sql//"`
         echo "Updating action counts for $wikiname wiki..."

@@ -6,16 +6,6 @@ SQL_DIR="/home/$REMOTEUSER/multimedia/geoperf"
 TSV_DIR="/home/$REMOTEUSER/tsvs_new"
 PUBLIC_DIR="/a/public-datasets/all/multimedia"
 
-echo "Updating global geo perf data..."
-for sqlfilepath in `ls $SQL_DIR/global-*.sql`; do
-        statname=`basename $sqlfilepath | sed "s/global-//" | sed "s/.sql//"`
-        echo "  $statname..."
-        tsvpath=$TSV_DIR/mvp_global-$statname.tsv
-        $MYSQL_CMD < $sqlfilepath > $tsvpath
-        mv -f $tsvpath $PUBLIC_DIR/media-viewer-geoperf-global-$statname.tsv
-done
-echo "  Done!"
-
 for sqlpath in `ls $SQL_DIR/*-image.sql | grep -v template.sql`; do
         wikiname=`basename $sqlpath | sed "s/-image.sql//"`
         echo "Updating geo perf data for $wikiname wiki..."
