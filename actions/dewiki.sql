@@ -21,10 +21,10 @@ SELECT CONCAT(SUBSTRING(timestamp, 1, 4), '-', SUBSTRING(timestamp, 5, 2), '-', 
 	SUM(CASE WHEN event_action = 'history-navigation' THEN 1 ELSE 0 END) AS 'history-navigation'
 
 	FROM (
-		SELECT timestamp, event_action FROM MediaViewer_7670440 FORCE INDEX(ix_MediaViewer_7670440_wiki_timestamp)
+		SELECT timestamp, event_action FROM MediaViewer_7670440
 			WHERE wiki = 'dewiki' AND timestamp < TIMESTAMP(CURDATE()) AND timestamp >= TIMESTAMP(DATE_SUB(CURDATE(), INTERVAL 30 DAY))
 		UNION ALL
-		SELECT timestamp, event_action FROM MediaViewer_8245578 FORCE INDEX(ix_MediaViewer_8245578_wiki_timestamp)
+		SELECT timestamp, event_action FROM MediaViewer_8245578
 			WHERE wiki = 'dewiki' AND timestamp < TIMESTAMP(CURDATE()) AND timestamp >= TIMESTAMP(DATE_SUB(CURDATE(), INTERVAL 30 DAY))
 	) AS MediaViewerUnioned
 

@@ -54,8 +54,6 @@ function generate( $folder, $wiki, $metric = null ) {
 
 	if ( $wiki != 'global' ) {
 		$replacement = 'wiki = \'' . $wiki . '\' AND';
-	} else {
-		$replacement = 'wiki IS NOT NULL AND';
 	}
 
 	$sql = file_get_contents( $folder . '/template.sql' );

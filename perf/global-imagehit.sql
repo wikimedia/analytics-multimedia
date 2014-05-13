@@ -35,11 +35,11 @@ CAST(SUBSTRING_INDEX(SUBSTRING_INDEX(
   GROUP_CONCAT(event_total ORDER BY event_total SEPARATOR ','),
    ',', 99/100 * COUNT(*) + 1), ',', -1) AS DECIMAL) AS imagehit_time_99th_percentile FROM (
 SELECT event_type, event_total, timestamp, wiki, event_XCache, event_varnish1hits, event_varnish2hits, event_varnish3hits FROM MultimediaViewerNetworkPerformance_7488625
-WHERE wiki IS NOT NULL AND timestamp < TIMESTAMP(CURDATE()) AND timestamp >= TIMESTAMP(DATE_SUB(CURDATE(), INTERVAL 30 DAY)) AND event_total > 20 AND event_type = 'image' AND LENGTH(event_XCache) > 0 AND (event_varnish1hits > 0 OR event_varnish2hits > 0 OR event_varnish2hits > 0)
+WHERE  timestamp < TIMESTAMP(CURDATE()) AND timestamp >= TIMESTAMP(DATE_SUB(CURDATE(), INTERVAL 30 DAY)) AND event_total > 20 AND event_type = 'image' AND LENGTH(event_XCache) > 0 AND (event_varnish1hits > 0 OR event_varnish2hits > 0 OR event_varnish2hits > 0)
 UNION ALL
 SELECT event_type, event_total, timestamp, wiki, event_XCache, event_varnish1hits, event_varnish2hits, event_varnish3hits FROM MultimediaViewerNetworkPerformance_7917896
-WHERE wiki IS NOT NULL AND timestamp < TIMESTAMP(CURDATE()) AND timestamp >= TIMESTAMP(DATE_SUB(CURDATE(), INTERVAL 30 DAY)) AND event_total > 20 AND event_type = 'image' AND LENGTH(event_XCache) > 0 AND (event_varnish1hits > 0 OR event_varnish2hits > 0 OR event_varnish2hits > 0)
+WHERE  timestamp < TIMESTAMP(CURDATE()) AND timestamp >= TIMESTAMP(DATE_SUB(CURDATE(), INTERVAL 30 DAY)) AND event_total > 20 AND event_type = 'image' AND LENGTH(event_XCache) > 0 AND (event_varnish1hits > 0 OR event_varnish2hits > 0 OR event_varnish2hits > 0)
 UNION ALL
 SELECT event_type, event_total, timestamp, wiki, event_XCache, event_varnish1hits, event_varnish2hits, event_varnish3hits FROM MultimediaViewerNetworkPerformance_7917896_1
-WHERE wiki IS NOT NULL AND timestamp < TIMESTAMP(CURDATE()) AND timestamp >= TIMESTAMP(DATE_SUB(CURDATE(), INTERVAL 30 DAY)) AND event_total > 20 AND event_type = 'image' AND LENGTH(event_XCache) > 0 AND (event_varnish1hits > 0 OR event_varnish2hits > 0 OR event_varnish2hits > 0)
+WHERE  timestamp < TIMESTAMP(CURDATE()) AND timestamp >= TIMESTAMP(DATE_SUB(CURDATE(), INTERVAL 30 DAY)) AND event_total > 20 AND event_type = 'image' AND LENGTH(event_XCache) > 0 AND (event_varnish1hits > 0 OR event_varnish2hits > 0 OR event_varnish2hits > 0)
 ) AS MultimediaViewerNetworkPerformanceUnioned GROUP BY datestring ORDER BY datestring ASC ) stats USING (datestring)
