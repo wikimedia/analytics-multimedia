@@ -1,16 +1,12 @@
 #!/usr/bin/env bash
 
+REMOTEUSERHOME="/home/marktraceur"
 MYSQL_CMD="mysql --defaults-file=~/.my.cnf.relevant log"
-CHECKOUT_DIR="$REMOTEUSERHOME/multimedia"
 SQL_DIR="$REMOTEUSERHOME/tsvs_sql"
 TSV_DIR="$REMOTEUSERHOME/tsvs_new"
 PUBLIC_DIR="/a/public-datasets/all/multimedia"
 
-cd $CHECKOUT_DIR
-echo "Pulling latest changes from repository..."
-git pull > /dev/null
-echo "Generating SQL files..."
-python $CHECKOUT_DIR/generate.py $SQL_DIR
+$REMOTEUSERHOME/deploy
 
 for sqlpath in `ls $SQL_DIR/perf/*-filerepoinfo.sql`; do
         wikiname=`basename $sqlpath | sed "s/-filerepoinfo.sql//"`
