@@ -1,16 +1,22 @@
 #!/usr/bin/env bash
 
-REMOTEUSER="marktraceur"
 MYSQL_CMD="mysql --defaults-file=~/.my.cnf.relevant log"
-SQL_DIR="/home/$REMOTEUSER/multimedia/geoperf"
-TSV_DIR="/home/$REMOTEUSER/tsvs_new"
+CHECKOUT_DIR="$REMOTEUSERHOME/multimedia"
+SQL_DIR="$REMOTEUSERHOME/tsvs_sql"
+TSV_DIR="$REMOTEUSERHOME/tsvs_new"
 PUBLIC_DIR="/a/public-datasets/all/multimedia"
 
-for sqlpath in `ls $SQL_DIR/*-image.sql | grep -v template.sql`; do
+cd $CHECKOUT_DIR
+echo "Pulling latest changes from repository..."
+git pull > /dev/null
+echo "Generating SQL files..."
+python $CHECKOUT_DIR/generate.py $SQL_DIR
+
+for sqlpath in `ls $SQL_DIR/geoperf/*-image.sql`; do
         wikiname=`basename $sqlpath | sed "s/-image.sql//"`
         echo "Updating geo perf data for $wikiname wiki..."
 
-        for sqlfilepath in `ls $SQL_DIR/${wikiname}-*.sql`; do
+        for sqlfilepath in `ls $SQL_DIR/geoperf/${wikiname}-*.sql`; do
                 statname=`basename $sqlfilepath | sed "s/.*-//" | sed "s/.sql//"`
                 echo "  $statname..."
                 tsvpath=$TSV_DIR/mvp_$wikiname-$statname.tsv

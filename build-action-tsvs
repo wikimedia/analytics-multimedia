@@ -1,16 +1,21 @@
 #!/usr/bin/env bash
 
-REMOTEUSER="marktraceur"
 MYSQL_CMD="mysql --defaults-file=~/.my.cnf.relevant log"
-SQL_DIR="/home/$REMOTEUSER/multimedia/actions"
-TSV_DIR="/home/$REMOTEUSER/tsvs_new"
+CHECKOUT_DIR="$REMOTEUSERHOME/multimedia"
+SQL_DIR="$REMOTEUSERHOME/tsvs_sql"
+TSV_DIR="$REMOTEUSERHOME/tsvs_new"
 PUBLIC_DIR="/a/public-datasets/all/multimedia"
 
-for sqlpath in `ls $SQL_DIR/*.sql | grep -v template.sql`; do
+cd $CHECKOUT_DIR
+echo "Pulling latest changes from repository..."
+git pull > /dev/null
+echo "Generating SQL files..."
+python $CHECKOUT_DIR/generate.py $SQL_DIR
+
+for sqlpath in `ls $SQL_DIR/actions/*.sql`; do
         wikiname=`basename $sqlpath | sed "s/.sql//"`
         echo "Updating action counts for $wikiname wiki..."
         tsvpath=$TSV_DIR/mv_$wikiname.tsv
         $MYSQL_CMD < $sqlpath > $tsvpath
         mv -f $tsvpath $PUBLIC_DIR/media-viewer-actions-$wikiname.tsv
 done
-
