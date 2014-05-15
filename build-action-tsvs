@@ -1,6 +1,11 @@
 #!/usr/bin/env bash
 
-REMOTEUSERHOME="/home/marktraceur"
+if [[ -z "$REMOTEUSERHOME" ]]
+then
+	echo "You must define the REMOTEUSERHOME environment variable before calling this script"
+	exit 1
+fi
+
 MYSQL_CMD="mysql --defaults-file=~/.my.cnf.relevant log"
 SQL_DIR="$REMOTEUSERHOME/tsvs_sql"
 TSV_DIR="$REMOTEUSERHOME/tsvs_new"
@@ -9,9 +14,9 @@ PUBLIC_DIR="/a/public-datasets/all/multimedia"
 $REMOTEUSERHOME/deploy
 
 for sqlpath in `ls $SQL_DIR/actions/*.sql`; do
-        wikiname=`basename $sqlpath | sed "s/.sql//"`
-        echo "Updating action counts for $wikiname wiki..."
-        tsvpath=$TSV_DIR/mv_$wikiname.tsv
-        $MYSQL_CMD < $sqlpath > $tsvpath
-        mv -f $tsvpath $PUBLIC_DIR/media-viewer-actions-$wikiname.tsv
+	wikiname=`basename $sqlpath | sed "s/.sql//"`
+	echo "Updating action counts for $wikiname wiki..."
+	tsvpath=$TSV_DIR/mv_$wikiname.tsv
+	$MYSQL_CMD < $sqlpath > $tsvpath
+	mv -f $tsvpath $PUBLIC_DIR/media-viewer-actions-$wikiname.tsv
 done

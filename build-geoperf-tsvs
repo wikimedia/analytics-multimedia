@@ -1,6 +1,11 @@
 #!/usr/bin/env bash
 
-REMOTEUSERHOME="/home/marktraceur"
+if [[ -z "$REMOTEUSERHOME" ]]
+then
+	echo "You must define the REMOTEUSERHOME environment variable before calling this script"
+	exit 1
+fi
+
 MYSQL_CMD="mysql --defaults-file=~/.my.cnf.relevant log"
 SQL_DIR="$REMOTEUSERHOME/tsvs_sql"
 TSV_DIR="$REMOTEUSERHOME/tsvs_new"
@@ -9,15 +14,15 @@ PUBLIC_DIR="/a/public-datasets/all/multimedia"
 $REMOTEUSERHOME/deploy
 
 for sqlpath in `ls $SQL_DIR/geoperf/*-image.sql`; do
-        wikiname=`basename $sqlpath | sed "s/-image.sql//"`
-        echo "Updating geo perf data for $wikiname wiki..."
+	wikiname=`basename $sqlpath | sed "s/-image.sql//"`
+	echo "Updating geo perf data for $wikiname wiki..."
 
-        for sqlfilepath in `ls $SQL_DIR/geoperf/${wikiname}-*.sql`; do
-                statname=`basename $sqlfilepath | sed "s/.*-//" | sed "s/.sql//"`
-                echo "  $statname..."
-                tsvpath=$TSV_DIR/mvp_$wikiname-$statname.tsv
-                $MYSQL_CMD < $sqlfilepath > $tsvpath
-                mv -f $tsvpath $PUBLIC_DIR/media-viewer-geoperf-$wikiname-$statname.tsv
-        done
-        echo "  Done!"
+	for sqlfilepath in `ls $SQL_DIR/geoperf/${wikiname}-*.sql`; do
+		statname=`basename $sqlfilepath | sed "s/.*-//" | sed "s/.sql//"`
+		echo "  $statname..."
+		tsvpath=$TSV_DIR/mvp_$wikiname-$statname.tsv
+		$MYSQL_CMD < $sqlfilepath > $tsvpath
+		mv -f $tsvpath $PUBLIC_DIR/media-viewer-geoperf-$wikiname-$statname.tsv
+	done
+	echo "  Done!"
 done
