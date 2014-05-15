@@ -10,8 +10,9 @@ MYSQL_CMD="mysql --defaults-file=~/.my.cnf.relevant log"
 SQL_DIR="$REMOTEUSERHOME/tsvs_sql"
 TSV_DIR="$REMOTEUSERHOME/tsvs_new"
 PUBLIC_DIR="/a/public-datasets/all/multimedia"
+CHECKOUT_DIR="$REMOTEUSERHOME/multimedia"
 
-$REMOTEUSERHOME/deploy
+$CHECKOUT_DIR/deploy
 
 for sqlpath in `ls $SQL_DIR/perf/*-filerepoinfo.sql`; do
 	wikiname=`basename $sqlpath | sed "s/-filerepoinfo.sql//"`
