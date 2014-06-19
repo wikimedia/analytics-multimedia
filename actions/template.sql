@@ -6,6 +6,7 @@ SELECT CONCAT(SUBSTRING(timestamp, 1, 4), '-', SUBSTRING(timestamp, 5, 2), '-', 
 	SUM(CASE WHEN event_action IN ('fullscreen-link-click', 'fullscreen') THEN event_samplingFactor ELSE 0 END) AS 'fullscreen',
 	SUM(CASE WHEN event_action IN ('defullscreen-link-click', 'defullscreen') THEN event_samplingFactor ELSE 0 END) AS 'defullscreen',
 	SUM(CASE WHEN event_action IN ('close-link-click', 'close') THEN event_samplingFactor ELSE 0 END) AS 'close',
+	SUM(CASE WHEN event_action = 'view-original-file' THEN event_samplingFactor ELSE 0 END) AS 'view-original-file',
 	SUM(CASE WHEN event_action IN ('site-link-click', 'file-description-page') THEN event_samplingFactor ELSE 0 END) AS 'file-description-page',
 	SUM(CASE WHEN event_action = 'file-description-page-abovefold' THEN event_samplingFactor ELSE 0 END) AS 'file-description-page-abovefold',
 	SUM(CASE WHEN event_action IN ('use-this-file-link-click', 'use-this-file-open') THEN event_samplingFactor ELSE 0 END) AS 'use-this-file-open',
@@ -31,7 +32,7 @@ SELECT CONCAT(SUBSTRING(timestamp, 1, 4), '-', SUBSTRING(timestamp, 5, 2), '-', 
 		SELECT timestamp, event_action, event_samplingFactor FROM MediaViewer_8572637
 			WHERE %wiki% timestamp < TIMESTAMP(CURDATE()) AND timestamp >= TIMESTAMP(DATE_SUB(CURDATE(), INTERVAL 30 DAY))
 		UNION ALL
-		SELECT timestamp, event_action, event_samplingFactor FROM MediaViewer_8922098
+		SELECT timestamp, event_action, event_samplingFactor FROM MediaViewer_8935489
 			WHERE %wiki% timestamp < TIMESTAMP(CURDATE()) AND timestamp >= TIMESTAMP(DATE_SUB(CURDATE(), INTERVAL 30 DAY))
 	) AS MediaViewerUnioned
 
