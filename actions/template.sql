@@ -20,7 +20,11 @@ SELECT CONCAT(SUBSTRING(timestamp, 1, 4), '-', SUBSTRING(timestamp, 5, 2), '-', 
 	SUM(CASE WHEN event_action = 'author-page' THEN event_samplingFactor ELSE 0 END) AS 'author-page',
 	SUM(CASE WHEN event_action = 'source-page' THEN event_samplingFactor ELSE 0 END) AS 'source-page',
 	SUM(CASE WHEN event_action = 'hash-load' THEN event_samplingFactor ELSE 0 END) AS 'hash-load',
-	SUM(CASE WHEN event_action = 'history-navigation' THEN event_samplingFactor ELSE 0 END) AS 'history-navigation'
+	SUM(CASE WHEN event_action = 'history-navigation' THEN event_samplingFactor ELSE 0 END) AS 'history-navigation',
+	SUM(CASE WHEN event_action = 'optout-loggedin' THEN event_samplingFactor ELSE 0 END) AS 'optout-loggedin',
+	SUM(CASE WHEN event_action = 'optout-anon' THEN event_samplingFactor ELSE 0 END) AS 'optout-anon',
+	SUM(CASE WHEN event_action = 'optin-loggedin' THEN event_samplingFactor ELSE 0 END) AS 'optin-loggedin',
+	SUM(CASE WHEN event_action = 'optin-anon' THEN event_samplingFactor ELSE 0 END) AS 'optin-anon'
 
 	FROM (
 		SELECT timestamp, event_action, 1 AS event_samplingFactor FROM MediaViewer_7670440
@@ -32,7 +36,7 @@ SELECT CONCAT(SUBSTRING(timestamp, 1, 4), '-', SUBSTRING(timestamp, 5, 2), '-', 
 		SELECT timestamp, event_action, event_samplingFactor FROM MediaViewer_8572637
 			WHERE %wiki% timestamp < TIMESTAMP(CURDATE()) AND timestamp >= TIMESTAMP(DATE_SUB(CURDATE(), INTERVAL 30 DAY))
 		UNION ALL
-		SELECT timestamp, event_action, event_samplingFactor FROM MediaViewer_8935489
+		SELECT timestamp, event_action, event_samplingFactor FROM MediaViewer_8935662
 			WHERE %wiki% timestamp < TIMESTAMP(CURDATE()) AND timestamp >= TIMESTAMP(DATE_SUB(CURDATE(), INTERVAL 30 DAY))
 	) AS MediaViewerUnioned
 
