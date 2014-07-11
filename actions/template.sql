@@ -21,12 +21,12 @@ SELECT CONCAT(SUBSTRING(timestamp, 1, 4), '-', SUBSTRING(timestamp, 5, 2), '-', 
 	SUM(CASE WHEN event_action = 'source-page' THEN event_samplingFactor ELSE 0 END) AS 'source-page',
 	SUM(CASE WHEN event_action = 'hash-load' THEN event_samplingFactor ELSE 0 END) AS 'hash-load',
 	SUM(CASE WHEN event_action = 'history-navigation' THEN event_samplingFactor ELSE 0 END) AS 'history-navigation',
-	SUM(CASE WHEN event_action = 'optout-loggedin' THEN event_samplingFactor ELSE 0 END) AS 'optout-loggedin',
+	SUM(CASE WHEN event_action = 'pref-optout-loggedin' THEN event_samplingFactor ELSE 0 END) AS 'optout-loggedin',
 	SUM(CASE WHEN event_action = 'optout-anon' THEN event_samplingFactor ELSE 0 END) AS 'optout-anon',
-	SUM(CASE WHEN event_action = 'optin-loggedin' THEN event_samplingFactor ELSE 0 END) AS 'optin-loggedin',
+	SUM(CASE WHEN event_action = 'pref-optin-loggedin' THEN event_samplingFactor ELSE 0 END) AS 'optin-loggedin',
 	SUM(CASE WHEN event_action = 'optin-anon' THEN event_samplingFactor ELSE 0 END) AS 'optin-anon',
-	SUM(CASE WHEN event_action IN ('optout-loggedin', 'optout-anon') THEN event_samplingFactor ELSE 0 END) AS 'optout-total',
-	SUM(CASE WHEN event_action IN ('optin-loggedin', 'optin-anon') THEN event_samplingFactor ELSE 0 END) AS 'optin-total'
+	SUM(CASE WHEN event_action IN ('pref-optout-loggedin', 'optout-anon') THEN event_samplingFactor ELSE 0 END) AS 'optout-total',
+	SUM(CASE WHEN event_action IN ('pref-optin-loggedin', 'optin-anon') THEN event_samplingFactor ELSE 0 END) AS 'optin-total'
 
 	FROM (
 		SELECT timestamp, event_action, 1 AS event_samplingFactor FROM MediaViewer_7670440
@@ -40,6 +40,8 @@ SELECT CONCAT(SUBSTRING(timestamp, 1, 4), '-', SUBSTRING(timestamp, 5, 2), '-', 
 		UNION ALL
 		SELECT timestamp, event_action, event_samplingFactor FROM MediaViewer_8935662
 			WHERE %wiki% timestamp < TIMESTAMP(CURDATE()) AND timestamp >= TIMESTAMP(DATE_SUB(CURDATE(), INTERVAL 30 DAY))
+		UNION ALL
+		SELECT timestamp, (CASE WHEN event_value = 0 THEN 'pref-optout-loggedin' else 'pref-optin-loggedin') as event_action, 1 as event_samplingFactor FROM PrefUpdate_5563398 WHERE event_property = 'multimediaviewer-enable'
 	) AS MediaViewerUnioned
 
 	GROUP BY datestring
