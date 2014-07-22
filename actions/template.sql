@@ -41,7 +41,8 @@ SELECT CONCAT(SUBSTRING(timestamp, 1, 4), '-', SUBSTRING(timestamp, 5, 2), '-', 
 		SELECT timestamp, event_action, event_samplingFactor FROM MediaViewer_8935662
 			WHERE %wiki% timestamp < TIMESTAMP(CURDATE()) AND timestamp >= TIMESTAMP(DATE_SUB(CURDATE(), INTERVAL 30 DAY))
 		UNION ALL
-		SELECT timestamp, (CASE WHEN event_value = 0 THEN 'pref-optout-loggedin' ELSE 'pref-optin-loggedin' END) AS event_action, 1 AS event_samplingFactor FROM PrefUpdate_5563398 WHERE event_property = 'multimediaviewer-enable'
+		SELECT timestamp, (CASE WHEN event_value = 0 THEN 'pref-optout-loggedin' ELSE 'pref-optin-loggedin' END) AS event_action, 1 AS event_samplingFactor FROM PrefUpdate_5563398
+			WHERE event_property = 'multimediaviewer-enable' AND timestamp < TIMESTAMP(CURDATE()) AND timestamp >= TIMESTAMP(DATE_SUB(CURDATE(), INTERVAL 30 DAY))
 	) AS MediaViewerUnioned
 
 	GROUP BY datestring
