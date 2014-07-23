@@ -6,7 +6,7 @@ then
 	exit 1
 fi
 
-MYSQL_CMD="mysql --defaults-file=~/.my.cnf.relevant log"
+MYSQL_CMD="mysql --defaults-file=~/.my.cnf.relevant"
 SQL_DIR="$REMOTEUSERHOME/tsvs_sql"
 TSV_DIR="$REMOTEUSERHOME/tsvs_new"
 PUBLIC_DIR="/a/public-datasets/all/multimedia"
@@ -18,6 +18,6 @@ for sqlpath in `ls $SQL_DIR/optout/*.sql`; do
 	wikiname=`basename $sqlpath | sed "s/.sql//"`
 	echo "Updating optout counts for $wikiname wiki..."
 	tsvpath=$TSV_DIR/mvo_$wikiname.tsv
-	$MYSQL_CMD < $sqlpath > $tsvpath
+	$MYSQL_CMD $wikiname < $sqlpath > $tsvpath
 	mv -f $tsvpath $PUBLIC_DIR/media-viewer-optout-$wikiname.tsv
 done
