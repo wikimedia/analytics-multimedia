@@ -4,10 +4,14 @@ CREATE TABLE mediaviewer_optout (
     day DATE,
     wikidb VARCHAR(16) COMMENT 'wiki dbname (e.g. "commonswiki")',
     all_touched INT COMMENT 'number of active users per user_touched (user_touched > now() - 30 days)',
+    all_edited INT COMMENT 'number of users who have edited in the last 30 days',
     all_active INT COMMENT 'number of active users per standard definition (at least 5 edits in last 30 days)',
+    all_very_active INT COMMENT 'number of very active users per standard definition (at least 100 edits in the last 30 days)',
     optout_total INT COMMENT 'total number of opted-out users',
     optout_touched INT COMMENT 'opted-out users who are active per user_touched',
-    optout_active INT COMMENT 'opted-out users who are active per standard definition'
+    optout_edited INT COMMENT 'opted-out users who have edited in the last 30 days',
+    optout_active INT COMMENT 'opted-out users who are active per standard definition',
+    optout_very_active INT COMMENT 'opted-out users who are very active per standard definition'
 );
 CREATE UNIQUE INDEX mediaviewer_optout_day_wikidb ON mediaviewer_optout (day, wikidb);
 CREATE INDEX mediaviewer_optout_wikidb ON mediaviewer_optout (wikidb);

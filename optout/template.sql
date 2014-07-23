@@ -2,15 +2,20 @@ USE %wikidb%;
 
 -- put today's numbers into a temporary table
 REPLACE INTO
-    staging.mediaviewer_optout (day, wikidb, all_touched, all_active, optout_total, optout_touched, optout_active)
+    staging.mediaviewer_optout (day, wikidb, all_touched, all_edited, all_active, all_very_active, 
+        optout_total, optout_touched, optout_edited, optout_active, optout_very_active)
 SELECT
     CURDATE() day,
     '%wikidb%' wikidb,
     SUM(1) all_touched,
+    SUM(edits_in_last_30_days > 0) all_edited,
     SUM(edits_in_last_30_days >= 5) all_active,
+    SUM(edits_in_last_30_days >= 100) all_very_active,
     (SELECT COUNT(*) FROM user_properties WHERE up_property = 'multimediaviewer-enable') optout_total,
     SUM(up_value IS NOT NULL) optout_touched,
-    SUM(edits_in_last_30_days >= 5 AND up_value IS NOT NULL) optout_active
+    SUM(edits_in_last_30_days > 0 AND up_value IS NOT NULL) optout_edited,
+    SUM(edits_in_last_30_days >= 5 AND up_value IS NOT NULL) optout_active,
+    SUM(edits_in_last_30_days >= 100 AND up_value IS NOT NULL) optout_very_active
 FROM
     user
     LEFT JOIN user_properties ON user_id = up_user AND up_property = 'multimediaviewer-enable'
