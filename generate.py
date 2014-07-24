@@ -87,6 +87,7 @@ for wiki in wikis:
         generate('geoperf', wiki, geo_perf_metric)
 
     generate('actions', wiki)
+    generate('duration', wiki)
 
     if wiki != 'global':
         generate('optout', wiki)
