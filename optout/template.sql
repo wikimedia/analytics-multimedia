@@ -44,7 +44,10 @@ SELECT
     optout_touched,
     optout_active,
     ( optout_touched / all_touched) * 100 AS optout_touched_percent,
-    ( optout_active / all_active) * 100 AS optout_active_percent
+    ( optout_active / all_active) * 100 AS optout_active_percent,
+    all_very_active,
+    optout_very_active,
+    ( optout_very_active / all_very_active) * 100 AS optout_very_active_percent
 FROM
     staging.mediaviewer_optout
 WHERE
