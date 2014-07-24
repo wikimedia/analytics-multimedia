@@ -15,13 +15,13 @@ SELECT * FROM (
     FROM
         NavigationTiming_8365252
     WHERE
+        %wiki%
         event_action = 'view'
         AND event_namespaceId = 6
         AND event_mediaWikiLoadComplete IS NOT NULL
         AND NOT event_isAnon
         AND timestamp < TIMESTAMP(CURDATE()) -- do not show partial data for the current day
         AND timestamp > TIMESTAMP(CURDATE() - INTERVAL 90 DAY)
-        %wiki%
     GROUP BY
         datestring
 ) navtiming_loggedin LEFT JOIN (
@@ -39,13 +39,13 @@ SELECT * FROM (
     FROM
         NavigationTiming_8365252
     WHERE
+        %wiki%
         event_action = 'view'
         AND event_namespaceId = 6
         AND event_mediaWikiLoadComplete IS NOT NULL
         AND event_isAnon
         AND timestamp < TIMESTAMP(CURDATE())
         AND timestamp > TIMESTAMP(CURDATE() - INTERVAL 90 DAY)
-        %wiki%
     GROUP BY
         datestring
 ) navtiming_anon USING (datestring) LEFT JOIN (
@@ -59,11 +59,11 @@ SELECT * FROM (
     FROM
         MultimediaViewerDuration_8572641
     WHERE
+        %wiki%
         event_duration IS NOT NULL
         AND event_type = 'click-to-first-image'
         AND timestamp < TIMESTAMP(CURDATE())
         AND timestamp > TIMESTAMP(CURDATE() - INTERVAL 90 DAY)
-        %wiki%
     GROUP BY
         datestring
 ) mmv_duration USING (datestring)
