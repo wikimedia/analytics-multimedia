@@ -11,7 +11,7 @@ SELECT * FROM (
             ORDER BY event_mediaWikiLoadComplete SEPARATOR ','), ',', 95/100*COUNT(*)+1), ',', -1) AS filepage_loggedin_95,
         SUBSTRING_INDEX(SUBSTRING_INDEX(GROUP_CONCAT(event_mediaWikiLoadComplete
             ORDER BY event_mediaWikiLoadComplete SEPARATOR ','), ',', 99/100*COUNT(*)+1), ',', -1) AS filepage_loggedin_99,
-        COUNT(*) AS filepage_loggedin_sample_size
+        COUNT(*) * 100 AS filepage_loggedin_population_size -- NavigationTiming data is sampled 1:1000
     FROM
         NavigationTiming_8365252
     WHERE
@@ -35,7 +35,7 @@ SELECT * FROM (
             ORDER BY event_mediaWikiLoadComplete SEPARATOR ','), ',', 95/100*COUNT(*)+1), ',', -1) AS filepage_anon_95,
         SUBSTRING_INDEX(SUBSTRING_INDEX(GROUP_CONCAT(event_mediaWikiLoadComplete
             ORDER BY event_mediaWikiLoadComplete SEPARATOR ','), ',', 99/100*COUNT(*)+1), ',', -1) AS filepage_anon_99,
-        COUNT(*) AS filepage_anon_sample_size
+        COUNT(*) * 1000 AS filepage_anon_population_size
     FROM
         NavigationTiming_8365252
     WHERE
@@ -55,7 +55,7 @@ SELECT * FROM (
         SUBSTRING_INDEX(SUBSTRING_INDEX(GROUP_CONCAT(event_duration ORDER BY event_duration SEPARATOR ','), ',', 90/100*COUNT(*)+1), ',', -1) AS mediaviewer_90,
         SUBSTRING_INDEX(SUBSTRING_INDEX(GROUP_CONCAT(event_duration ORDER BY event_duration SEPARATOR ','), ',', 95/100*COUNT(*)+1), ',', -1) AS mediaviewer_95,
         SUBSTRING_INDEX(SUBSTRING_INDEX(GROUP_CONCAT(event_duration ORDER BY event_duration SEPARATOR ','), ',', 99/100*COUNT(*)+1), ',', -1) AS mediaviewer_99,
-        COUNT(*) AS mediaviewer_sample_size
+        COUNT(*) * event_samplingFactor AS mediaviewer_population_size
     FROM
         MultimediaViewerDuration_8572641
     WHERE
