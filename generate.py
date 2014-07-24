@@ -7,7 +7,6 @@ wikis = [
     'global',
     'cawiki',
     'commonswiki',
-    'czwiki',
     'dewiki',
     'enwiki',
     'enwikivoyage',
