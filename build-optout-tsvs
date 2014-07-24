@@ -17,6 +17,8 @@ then
 	mkdir "$SQL_DIR"
 fi
 
+cp "$CHECKOUT_DIR/optout/global.sql" "$SQL_DIR"
+
 $CHECKOUT_DIR/deploy
 
 for sqlpath in `ls $SQL_DIR/*.sql`; do
