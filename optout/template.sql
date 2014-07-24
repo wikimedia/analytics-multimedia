@@ -2,7 +2,7 @@ USE %wikidb%;
 
 -- put today's numbers into a temporary table
 REPLACE INTO
-    staging.mediaviewer_optout (day, wikidb, all_touched, all_edited, all_active, all_very_active, 
+    staging.mediaviewer_optout (day, wikidb, all_touched, all_edited, all_active, all_very_active,
         optout_total, optout_touched, optout_edited, optout_active, optout_very_active)
 SELECT
     CURDATE() day,
@@ -48,5 +48,5 @@ SELECT
 FROM
     staging.mediaviewer_optout
 WHERE
-    wikidb = '%wikidb%'
+    %wikidb%
 ;

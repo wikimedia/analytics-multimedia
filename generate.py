@@ -65,7 +65,7 @@ def generate(folder, wiki, metric=None):
     dbreplacement = '1'
 
     if wiki != 'global':
-        dbreplacement = wiki
+        dbreplacement = 'wikidb = \'' + wiki + '\''
 
     sql = sql.replace('%wiki%', replacement)
     sql = sql.replace('%wikidb%', dbreplacement)
