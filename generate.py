@@ -61,14 +61,8 @@ def generate(folder, wiki, metric=None):
     sql = open(
         os.path.dirname(os.path.realpath(__file__)) +
         '/' + folder + '/template.sql').read(10000)
-
-    dbreplacement = '1'
-
-    if wiki != 'global':
-        dbreplacement = wiki
-
     sql = sql.replace('%wiki%', replacement)
-    sql = sql.replace('%wikidb%', dbreplacement)
+    sql = sql.replace('%wikidb%', wiki)
 
     if metric is not None:
         sql = sql.replace('%metricname%', metric['name'])
@@ -93,4 +87,6 @@ for wiki in wikis:
         generate('geoperf', wiki, geo_perf_metric)
 
     generate('actions', wiki)
-    generate('optout', wiki)
+
+    if wiki != 'global':
+        generate('optout', wiki)
