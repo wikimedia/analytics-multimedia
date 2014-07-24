@@ -7,14 +7,19 @@ then
 fi
 
 MYSQL_CMD="mysql --defaults-file=~/.my.cnf.relevant log"
-SQL_DIR="$REMOTEUSERHOME/tsvs_sql"
+SQL_DIR="$REMOTEUSERHOME/tsvs_sql/actions"
 TSV_DIR="$REMOTEUSERHOME/tsvs_new"
 PUBLIC_DIR="/a/public-datasets/all/multimedia"
 CHECKOUT_DIR="$REMOTEUSERHOME/multimedia"
 
+if [ ! -d "$SQL_DIR" ]
+then
+	mkdir "$SQL_DIR"
+fi
+
 $CHECKOUT_DIR/deploy
 
-for sqlpath in `ls $SQL_DIR/actions/*.sql`; do
+for sqlpath in `ls $SQL_DIR/*.sql`; do
 	wikiname=`basename $sqlpath | sed "s/.sql//"`
 	echo "Updating action counts for $wikiname wiki..."
 	tsvpath=$TSV_DIR/mv_$wikiname.tsv

@@ -7,18 +7,23 @@ then
 fi
 
 MYSQL_CMD="mysql --defaults-file=~/.my.cnf.relevant log"
-SQL_DIR="$REMOTEUSERHOME/tsvs_sql"
+SQL_DIR="$REMOTEUSERHOME/tsvs_sql/geoperf"
 TSV_DIR="$REMOTEUSERHOME/tsvs_new"
 PUBLIC_DIR="/a/public-datasets/all/multimedia"
 CHECKOUT_DIR="$REMOTEUSERHOME/multimedia"
 
+if [ ! -d "$SQL_DIR" ]
+then
+	mkdir "$SQL_DIR"
+fi
+
 $CHECKOUT_DIR/deploy
 
-for sqlpath in `ls $SQL_DIR/geoperf/*-image.sql`; do
+for sqlpath in `ls $SQL_DIR/*-image.sql`; do
 	wikiname=`basename $sqlpath | sed "s/-image.sql//"`
 	echo "Updating geo perf data for $wikiname wiki..."
 
-	for sqlfilepath in `ls $SQL_DIR/geoperf/${wikiname}-*.sql`; do
+	for sqlfilepath in `ls $SQL_DIR/${wikiname}-*.sql`; do
 		statname=`basename $sqlfilepath | sed "s/.*-//" | sed "s/.sql//"`
 		echo "  $statname..."
 		tsvpath=$TSV_DIR/mvp_$wikiname-$statname.tsv
