@@ -2,7 +2,7 @@ USE %wikidb%;
 
 -- put today's numbers into a temporary table
 REPLACE INTO
-    staging.mediaviewer_optout (day, wikidb, all_touched, all_edited, all_active, all_very_active, 
+    staging.mediaviewer_optout (day, wikidb, all_touched, all_edited, all_active, all_very_active,
         optout_total, optout_touched, optout_edited, optout_active, optout_very_active)
 SELECT
     CURDATE() day,
@@ -38,13 +38,13 @@ WHERE
 
 -- return the numbers for the recent days
 SELECT
-    DATE_FORMAT(day, '%Y-%m-%d') as datestring,
+    DATE_FORMAT(day, '%Y-%m-%d') AS datestring,
     all_touched,
     all_active,
     optout_touched,
     optout_active,
-    optout_touched / (all_touched + optout_touched) * 100 optout_touched_percent,
-    optout_active / (all_active + optout_active) * 100 optout_active_percent
+    ( optout_touched / all_touched) * 100 AS optout_touched_percent,
+    ( optout_active / all_active) * 100 AS optout_active_percent
 FROM
     staging.mediaviewer_optout
 WHERE
