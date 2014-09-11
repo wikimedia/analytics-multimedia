@@ -11,7 +11,8 @@ FROM (
         event_step AS step,
         COUNT(*) AS survivors
     FROM
-        UploadWizardStep_8612364
+        UploadWizardStep_8851805
+    WHERE timestamp >= TIMESTAMP(DATE_SUB(CURDATE(), INTERVAL 30 DAY))
     GROUP BY
         event_step
     ORDER BY

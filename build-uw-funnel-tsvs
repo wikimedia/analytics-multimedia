@@ -12,11 +12,18 @@ TSV_DIR="$REMOTEUSERHOME/tsvs_new"
 PUBLIC_DIR="/a/public-datasets/all/multimedia"
 CHECKOUT_DIR="$REMOTEUSERHOME/multimedia"
 
-sqlfilepath="$CHECKOUT_DIR/uw-funnel/query.sql"
-tsvpath=$TSV_DIR/uw-funnel.tsv
-echo "Updating UploadWizard funnel data..."
+sqlfilepath="$CHECKOUT_DIR/uw-funnel/relative.sql"
+tsvpath=$TSV_DIR/uw-funnel-relative.tsv
+echo "Updating UploadWizard relative funnel data..."
 
 $MYSQL_CMD < $sqlfilepath > $tsvpath
+mv -f $tsvpath $PUBLIC_DIR/upload-wizard-funnel-relative.tsv
 
-mv -f $tsvpath $PUBLIC_DIR/upload-wizard-funnel.tsv
+sqlfilepath="$CHECKOUT_DIR/uw-funnel/absolute.sql"
+tsvpath=$TSV_DIR/uw-funnel-absolute.tsv
+echo "Updating UploadWizard absolute funnel data..."
+
+$MYSQL_CMD < $sqlfilepath > $tsvpath
+mv -f $tsvpath $PUBLIC_DIR/upload-wizard-funnel-absolute.tsv
+
 echo "  Done!"
