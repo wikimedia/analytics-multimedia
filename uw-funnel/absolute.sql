@@ -7,8 +7,11 @@ SELECT
     SUM(CASE WHEN event_step = 'thanks' THEN 1 ELSE 0 END) AS 'thanks'
 FROM
     UploadWizardStep_8851805
-WHERE timestamp >= TIMESTAMP(DATE_SUB(CURDATE(), INTERVAL 30 DAY))
-AND timestamp < TIMESTAMP(DATE_SUB(CURDATE(), INTERVAL 1 DAY))
+WHERE
+    timestamp >= TIMESTAMP(DATE_SUB(CURDATE(), INTERVAL 30 DAY))
+    AND timestamp < TIMESTAMP(DATE_SUB(CURDATE(), INTERVAL 1 DAY))
 GROUP BY
     datestring
-ORDER BY datestring ASC
+ORDER BY
+    datestring ASC
+;
