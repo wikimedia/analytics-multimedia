@@ -29,6 +29,7 @@ for sqlpath in `ls $SQL_DIR/*-filerepoinfo.sql`; do
 		tsvpath=$TSV_DIR/mvp_$wikiname-$statname.tsv
 		$MYSQL_CMD < $sqlfilepath > $tsvpath
 		mv -f $tsvpath $PUBLIC_DIR/media-viewer-perf-$wikiname-$statname.tsv
+		chmod 664 $PUBLIC_DIR/media-viewer-perf-$wikiname-$statname.tsv
 	done
 	echo "  Done!"
 done
@@ -36,4 +37,5 @@ done
 echo "Updating mmv-versus-filepage perf data..."
 tsvpath="$TSV_DIR/mvp_mmv_versus_filepage.tsv"
 $MYSQL_CMD < $CHECKOUT_DIR/perf/mmv-versus-filepage.sql > $tsvpath && mv -f $tsvpath $PUBLIC_DIR/media-viewer-perf-mmv-versus-filepage.tsv
+chmod 664 $PUBLIC_DIR/media-viewer-perf-mmv-versus-filepage.tsv
 echo "  Done!"

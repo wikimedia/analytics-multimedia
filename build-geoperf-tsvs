@@ -29,6 +29,7 @@ for sqlpath in `ls $SQL_DIR/*-image.sql`; do
 		tsvpath=$TSV_DIR/mvp_$wikiname-$statname.tsv
 		$MYSQL_CMD < $sqlfilepath > $tsvpath
 		mv -f $tsvpath $PUBLIC_DIR/media-viewer-geoperf-$wikiname-$statname.tsv
+		chmod 664 $PUBLIC_DIR/media-viewer-geoperf-$wikiname-$statname.tsv
 	done
 	echo "  Done!"
 done

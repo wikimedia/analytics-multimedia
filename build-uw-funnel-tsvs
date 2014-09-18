@@ -18,6 +18,7 @@ echo "Updating UploadWizard relative funnel data..."
 
 $MYSQL_CMD < $sqlfilepath > $tsvpath
 mv -f $tsvpath $PUBLIC_DIR/upload-wizard-funnel-relative.tsv
+chmod 664 $PUBLIC_DIR/upload-wizard-funnel-relative.tsv
 
 sqlfilepath="$CHECKOUT_DIR/uw-funnel/absolute.sql"
 tsvpath=$TSV_DIR/uw-funnel-absolute.tsv
@@ -25,6 +26,7 @@ echo "Updating UploadWizard absolute funnel data..."
 
 $MYSQL_CMD < $sqlfilepath > $tsvpath
 mv -f $tsvpath $PUBLIC_DIR/upload-wizard-funnel-absolute.tsv
+chmod 664 $PUBLIC_DIR/upload-wizard-funnel-absolute.tsv
 
 sqlfilepath="$CHECKOUT_DIR/uw-funnel/overview.sql"
 tsvpath=$TSV_DIR/uw-funnel-overview.tsv
@@ -33,5 +35,6 @@ echo "Updating UploadWizard funnel overview data..."
 # limn can't handle headers; survival rate is meaningless for the last step
 $MYSQL_CMD < $sqlfilepath | tail -n+2 | head -n-1 > $tsvpath
 mv -f $tsvpath $PUBLIC_DIR/upload-wizard-funnel-overview.tsv
+chmod 664 $PUBLIC_DIR/upload-wizard-funnel-overview.tsv
 
 echo "  Done!"

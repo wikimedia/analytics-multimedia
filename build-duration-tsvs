@@ -25,4 +25,5 @@ for sqlpath in `ls $SQL_DIR/*.sql`; do
 	tsvpath=$TSV_DIR/mvd_$wikiname.tsv
 	$MYSQL_CMD < $sqlpath > $tsvpath
 	mv -f $tsvpath $PUBLIC_DIR/media-viewer-duration-$wikiname.tsv
+	chmod 664 $PUBLIC_DIR/media-viewer-duration-$wikiname.tsv
 done

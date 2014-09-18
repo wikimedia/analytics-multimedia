@@ -31,6 +31,7 @@ for sqlpath in `ls $SQL_DIR/*.sql`; do
 	tsvpath=$TSV_DIR/mvo_$wikiname.tsv
 	$MYSQL_CMD $wikiname < $sqlpath > $tsvpath
 	mv -f $tsvpath $PUBLIC_DIR/media-viewer-optout-$wikiname.tsv
+	chmod 664 $PUBLIC_DIR/media-viewer-optout-$wikiname.tsv
 done
 
 # global needs to run last, because it's reading the data for all wikis from the staging table
@@ -39,3 +40,4 @@ echo "Updating optout counts for global wiki..."
 tsvpath=$TSV_DIR/mvo_global.tsv
 $MYSQL_CMD log < "$REMOTEUSERHOME/tsvs_sql/optout/global.sql" > $tsvpath
 mv -f $tsvpath $PUBLIC_DIR/media-viewer-optout-global.tsv
+chmod 664 $PUBLIC_DIR/media-viewer-optout-global.tsv
