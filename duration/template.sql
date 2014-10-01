@@ -12,16 +12,35 @@ SELECT * FROM (
         SUBSTRING_INDEX(SUBSTRING_INDEX(GROUP_CONCAT(event_domComplete
             ORDER BY event_domComplete SEPARATOR ','), ',', 99/100*COUNT(*)+1), ',', -1) AS filepage_loggedin_99,
         COUNT(*) * 100 AS filepage_loggedin_population_size -- NavigationTiming data is sampled 1:1000
-    FROM
-        NavigationTiming_8365252
-    WHERE
-        %wiki%
-        event_action = 'view'
-        AND event_namespaceId = 6
-        AND event_domComplete IS NOT NULL
-        AND NOT event_isAnon
-        AND timestamp < TIMESTAMP(CURDATE()) -- do not show partial data for the current day
-        AND timestamp > TIMESTAMP(CURDATE() - INTERVAL 90 DAY)
+    FROM (
+        SELECT
+            *,
+            NULL event_firstPaint,
+            NULL event_firstPaintAfterLoad
+        FROM
+            NavigationTiming_8365252
+        WHERE
+            %wiki%
+            event_action = 'view'
+            AND event_namespaceId = 6
+            AND event_domComplete IS NOT NULL
+            AND NOT event_isAnon
+            AND timestamp < TIMESTAMP(CURDATE()) -- do not show partial data for the current day
+            AND timestamp > TIMESTAMP(CURDATE() - INTERVAL 90 DAY)
+        UNION ALL
+        SELECT
+            *
+        FROM
+            NavigationTiming_8477778
+        WHERE
+            %wiki%
+            event_action = 'view'
+            AND event_namespaceId = 6
+            AND event_domComplete IS NOT NULL
+            AND NOT event_isAnon
+            AND timestamp < TIMESTAMP(CURDATE()) -- do not show partial data for the current day
+            AND timestamp > TIMESTAMP(CURDATE() - INTERVAL 90 DAY)
+    ) NavigationTiming_unioned
     GROUP BY
         datestring
 ) navtiming_loggedin LEFT JOIN (
@@ -36,16 +55,35 @@ SELECT * FROM (
         SUBSTRING_INDEX(SUBSTRING_INDEX(GROUP_CONCAT(event_domComplete
             ORDER BY event_domComplete SEPARATOR ','), ',', 99/100*COUNT(*)+1), ',', -1) AS filepage_anon_99,
         COUNT(*) * 1000 AS filepage_anon_population_size
-    FROM
-        NavigationTiming_8365252
-    WHERE
-        %wiki%
-        event_action = 'view'
-        AND event_namespaceId = 6
-        AND event_domComplete IS NOT NULL
-        AND event_isAnon
-        AND timestamp < TIMESTAMP(CURDATE())
-        AND timestamp > TIMESTAMP(CURDATE() - INTERVAL 90 DAY)
+    FROM (
+        SELECT
+            *,
+            NULL event_firstPaint,
+            NULL event_firstPaintAfterLoad
+        FROM
+            NavigationTiming_8365252
+        WHERE
+            %wiki%
+            event_action = 'view'
+            AND event_namespaceId = 6
+            AND event_domComplete IS NOT NULL
+            AND event_isAnon
+            AND timestamp < TIMESTAMP(CURDATE())
+            AND timestamp > TIMESTAMP(CURDATE() - INTERVAL 90 DAY)
+        UNION ALL
+        SELECT
+            *
+        FROM
+            NavigationTiming_8477778
+        WHERE
+            %wiki%
+            event_action = 'view'
+            AND event_namespaceId = 6
+            AND event_domComplete IS NOT NULL
+            AND event_isAnon
+            AND timestamp < TIMESTAMP(CURDATE())
+            AND timestamp > TIMESTAMP(CURDATE() - INTERVAL 90 DAY)
+        ) NavigationTiming_unioned_2
     GROUP BY
         datestring
 ) navtiming_anon USING (datestring) LEFT JOIN (
