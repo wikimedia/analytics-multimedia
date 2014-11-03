@@ -39,9 +39,3 @@ tsvpath="$TSV_DIR/mvp_mmv_versus_filepage.tsv"
 $MYSQL_CMD < $CHECKOUT_DIR/perf/mmv-versus-filepage.sql > $tsvpath && mv -f $tsvpath $PUBLIC_DIR/media-viewer-perf-mmv-versus-filepage.tsv
 chmod 664 $PUBLIC_DIR/media-viewer-perf-mmv-versus-filepage.tsv
 echo "  Done!"
-
-echo "Updating mmv-versus-filepage-new perf data..."
-tsvpath="$TSV_DIR/mvp_mmv_versus_filepage_new.tsv"
-$MYSQL_CMD < $CHECKOUT_DIR/perf/mmv-versus-filepage-new.sql > $tsvpath && mv -f $tsvpath $PUBLIC_DIR/media-viewer-perf-mmv-versus-filepage-new.tsv
-chmod 664 $PUBLIC_DIR/media-viewer-perf-mmv-versus-filepage-new.tsv
-echo "  Done!"
