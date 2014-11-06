@@ -11,7 +11,7 @@ SELECT * FROM (
             ORDER BY event_fullLoadingTime SEPARATOR ','), ',', 95/100*COUNT(*)+1), ',', -1) AS filepage_loggedin_95,
         SUBSTRING_INDEX(SUBSTRING_INDEX(GROUP_CONCAT(event_fullLoadingTime
             ORDER BY event_fullLoadingTime SEPARATOR ','), ',', 99/100*COUNT(*)+1), ',', -1) AS filepage_loggedin_99,
-        COUNT(*) * event_samplingFactor AS filepage_loggedin_population_size
+        SUM(event_samplingFactor) AS filepage_loggedin_population_size
     FROM
         ImageMetricsLoadingTime_10078363
     WHERE
@@ -34,7 +34,7 @@ SELECT * FROM (
             ORDER BY event_fullLoadingTime SEPARATOR ','), ',', 95/100*COUNT(*)+1), ',', -1) AS filepage_anon_95,
         SUBSTRING_INDEX(SUBSTRING_INDEX(GROUP_CONCAT(event_fullLoadingTime
             ORDER BY event_fullLoadingTime SEPARATOR ','), ',', 99/100*COUNT(*)+1), ',', -1) AS filepage_anon_99,
-        COUNT(*) * event_samplingFactor AS filepage_anon_population_size
+        SUM(event_samplingFactor) AS filepage_anon_population_size
     FROM
         ImageMetricsLoadingTime_10078363
     WHERE
@@ -53,7 +53,7 @@ SELECT * FROM (
         SUBSTRING_INDEX(SUBSTRING_INDEX(GROUP_CONCAT(event_duration ORDER BY event_duration SEPARATOR ','), ',', 90/100*COUNT(*)+1), ',', -1) AS mediaviewer_90,
         SUBSTRING_INDEX(SUBSTRING_INDEX(GROUP_CONCAT(event_duration ORDER BY event_duration SEPARATOR ','), ',', 95/100*COUNT(*)+1), ',', -1) AS mediaviewer_95,
         SUBSTRING_INDEX(SUBSTRING_INDEX(GROUP_CONCAT(event_duration ORDER BY event_duration SEPARATOR ','), ',', 99/100*COUNT(*)+1), ',', -1) AS mediaviewer_99,
-        COUNT(*) * event_samplingFactor AS mediaviewer_population_size
+        SUM(event_samplingFactor) AS mediaviewer_population_size
     FROM
         MultimediaViewerDuration_8572641
     WHERE
