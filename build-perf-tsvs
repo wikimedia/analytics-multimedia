@@ -6,7 +6,7 @@ then
 	exit 1
 fi
 
-MYSQL_CMD="mysql --defaults-file=~/.my.cnf.relevant log"
+MYSQL_CMD="mysql --defaults-extra-file=/etc/mysql/conf.d/research-client.cnf -hanalytics-store.eqiad.wmnet log"
 SQL_DIR="$REMOTEUSERHOME/tsvs_sql/perf"
 TSV_DIR="$REMOTEUSERHOME/tsvs_new"
 PUBLIC_DIR="/a/public-datasets/all/multimedia"
