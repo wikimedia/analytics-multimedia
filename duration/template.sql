@@ -54,8 +54,23 @@ SELECT * FROM (
         SUBSTRING_INDEX(SUBSTRING_INDEX(GROUP_CONCAT(event_duration ORDER BY event_duration SEPARATOR ','), ',', 95/100*COUNT(*)+1), ',', -1) AS mediaviewer_95,
         SUBSTRING_INDEX(SUBSTRING_INDEX(GROUP_CONCAT(event_duration ORDER BY event_duration SEPARATOR ','), ',', 99/100*COUNT(*)+1), ',', -1) AS mediaviewer_99,
         SUM(event_samplingFactor) AS mediaviewer_population_size
-    FROM
-        MultimediaViewerDuration_8572641
+    FROM (
+        SELECT wiki, timestamp, event_type, event_duration, event_samplingFactor FROM MultimediaViewerDuration_8572641
+        WHERE
+            %wiki%
+            event_duration IS NOT NULL
+            AND event_type = 'click-to-first-image'
+            AND timestamp < TIMESTAMP(CURDATE())
+            AND timestamp > TIMESTAMP(CURDATE() - INTERVAL 90 DAY)
+        UNION ALL
+        SELECT wiki, timestamp, event_type, event_duration, event_samplingFactor FROM MultimediaViewerDuration_10427980
+        WHERE
+            %wiki%
+            event_duration IS NOT NULL
+            AND event_type = 'click-to-first-image'
+            AND timestamp < TIMESTAMP(CURDATE())
+            AND timestamp > TIMESTAMP(CURDATE() - INTERVAL 90 DAY)
+    ) AS MultimediaViewerDuration_Unioned
     WHERE
         %wiki%
         event_duration IS NOT NULL
