@@ -27,4 +27,7 @@ CAST(SUBSTRING_INDEX(SUBSTRING_INDEX(
    ',', 99/100 * COUNT(*) + 1), ',', -1) AS DECIMAL) AS %metricname%_time_99th_percentile FROM (
 SELECT %metricfields% FROM MultimediaViewerNetworkPerformance_7917896
 WHERE %wiki% timestamp < TIMESTAMP(CURDATE()) AND timestamp >= TIMESTAMP(DATE_SUB(CURDATE(), INTERVAL 30 DAY)) AND event_total > 20 AND %metricwhere%
+UNION ALL
+SELECT %metricfields% FROM MultimediaViewerNetworkPerformance_10596581
+WHERE %wiki% timestamp < TIMESTAMP(CURDATE()) AND timestamp >= TIMESTAMP(DATE_SUB(CURDATE(), INTERVAL 30 DAY)) AND event_total > 20 AND %metricwhere%
 ) AS MultimediaViewerNetworkPerformanceUnioned GROUP BY datestring ORDER BY datestring ASC ) stats USING (datestring)

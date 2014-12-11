@@ -21,4 +21,7 @@ CAST(SUBSTRING_INDEX(SUBSTRING_INDEX(
 FROM (
 SELECT timestamp, event_total, event_country, event_type, wiki FROM MultimediaViewerNetworkPerformance_7917896
 WHERE %wiki% %metricwhere% AND timestamp < TIMESTAMP(CURDATE()) AND timestamp >= TIMESTAMP(DATE_SUB(CURDATE(), INTERVAL 10 DAY)) AND event_total > 20 AND event_country != ''
+UNION ALL
+SELECT timestamp, event_total, event_country, event_type, wiki FROM MultimediaViewerNetworkPerformance_10596581
+WHERE %wiki% %metricwhere% AND timestamp < TIMESTAMP(CURDATE()) AND timestamp >= TIMESTAMP(DATE_SUB(CURDATE(), INTERVAL 10 DAY)) AND event_total > 20 AND event_country != ''
 ) MultimediaViewerNetworkPerformanceUnioned GROUP BY country HAVING sample_size > 10 ORDER BY mean ASC
