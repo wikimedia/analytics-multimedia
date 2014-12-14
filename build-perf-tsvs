@@ -34,6 +34,12 @@ for sqlpath in `ls $SQL_DIR/*-filerepoinfo.sql`; do
 	echo "  Done!"
 done
 
+echo "Updating cache miss ratio data..."
+tsvpath="$TSV_DIR/cache-miss-ratio.tsv"
+$MYSQL_CMD < $CHECKOUT_DIR/perf/cache-miss-ratio.sql > $tsvpath && mv -f $tsvpath $PUBLIC_DIR/cache-miss-ratio.tsv
+chmod 664 $PUBLIC_DIR/media-viewer-cache-miss-ratio.tsv
+
+
 echo "Updating mmv-versus-filepage perf data..."
 tsvpath="$TSV_DIR/mvp_mmv_versus_filepage.tsv"
 $MYSQL_CMD < $CHECKOUT_DIR/perf/mmv-versus-filepage.sql > $tsvpath && mv -f $tsvpath $PUBLIC_DIR/media-viewer-perf-mmv-versus-filepage.tsv
