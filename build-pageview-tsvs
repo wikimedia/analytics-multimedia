@@ -1,0 +1,29 @@
+#!/usr/bin/env bash
+
+if [[ -z "$REMOTEUSERHOME" ]]
+then
+	echo "You must define the REMOTEUSERHOME environment variable before calling this script"
+	exit 1
+fi
+
+MYSQL_CMD="mysql --defaults-extra-file=/etc/mysql/conf.d/research-client.cnf -hanalytics-store.eqiad.wmnet log"
+SQL_DIR="$REMOTEUSERHOME/tsvs_sql/pageviews"
+TSV_DIR="$REMOTEUSERHOME/tsvs_new"
+PUBLIC_DIR="/a/public-datasets/all/multimedia"
+CHECKOUT_DIR="$REMOTEUSERHOME/multimedia"
+
+if [ ! -d "$SQL_DIR" ]
+then
+	mkdir "$SQL_DIR"
+fi
+
+$CHECKOUT_DIR/deploy
+
+for sqlpath in `ls $SQL_DIR/*.sql`; do
+	wikiname=`basename $sqlpath | sed "s/.sql//"`
+	echo "Updating pageviews for $wikiname wiki..."
+	tsvpath=$TSV_DIR/mvpv_$wikiname.tsv
+	$MYSQL_CMD < $sqlpath > $tsvpath
+	mv -f $tsvpath $PUBLIC_DIR/media-viewer-pageviews-$wikiname.tsv
+	chmod 664 $PUBLIC_DIR/media-viewer-pageviews-$wikiname.tsv
+done
