@@ -2,6 +2,12 @@ SET group_concat_max_len = 10485760;
 SELECT * FROM (SELECT concat(substring(timestamp, 1, 4), '-', substring(timestamp, 5, 2), '-', substring(timestamp, 7, 2)) AS datestring FROM (
 SELECT timestamp FROM MultimediaViewerNetworkPerformance_7917896
 WHERE timestamp < TIMESTAMP(CURDATE()) AND timestamp >= TIMESTAMP(DATE_SUB(CURDATE(), INTERVAL 30 DAY))
+UNION ALL
+SELECT timestamp FROM MultimediaViewerNetworkPerformance_10596581
+WHERE timestamp < TIMESTAMP(CURDATE()) AND timestamp >= TIMESTAMP(DATE_SUB(CURDATE(), INTERVAL 30 DAY))
+UNION ALL
+SELECT timestamp FROM MultimediaViewerNetworkPerformance_10774577
+WHERE timestamp < TIMESTAMP(CURDATE()) AND timestamp >= TIMESTAMP(DATE_SUB(CURDATE(), INTERVAL 30 DAY))
 ) AS MultimediaViewerNetworkPerformanceUnioned GROUP BY datestring ORDER BY datestring ASC) dates
 
 LEFT OUTER JOIN
@@ -29,5 +35,8 @@ SELECT %metricfields% FROM MultimediaViewerNetworkPerformance_7917896
 WHERE %wiki% timestamp < TIMESTAMP(CURDATE()) AND timestamp >= TIMESTAMP(DATE_SUB(CURDATE(), INTERVAL 30 DAY)) AND event_total > 20 AND %metricwhere%
 UNION ALL
 SELECT %metricfields% FROM MultimediaViewerNetworkPerformance_10596581
+WHERE %wiki% timestamp < TIMESTAMP(CURDATE()) AND timestamp >= TIMESTAMP(DATE_SUB(CURDATE(), INTERVAL 30 DAY)) AND event_total > 20 AND %metricwhere%
+UNION ALL
+SELECT %metricfields% FROM MultimediaViewerNetworkPerformance_10774577
 WHERE %wiki% timestamp < TIMESTAMP(CURDATE()) AND timestamp >= TIMESTAMP(DATE_SUB(CURDATE(), INTERVAL 30 DAY)) AND event_total > 20 AND %metricwhere%
 ) AS MultimediaViewerNetworkPerformanceUnioned GROUP BY datestring ORDER BY datestring ASC ) stats USING (datestring)
