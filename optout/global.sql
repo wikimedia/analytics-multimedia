@@ -12,4 +12,6 @@ SELECT
     ( SUM(optout_very_active) / SUM(all_very_active) ) * 100 AS optout_very_active_percent
 FROM
     staging.mediaviewer_optout
+WHERE
+    wikidb != 'commonswiki' -- commons is opt-in
 GROUP BY datestring;
