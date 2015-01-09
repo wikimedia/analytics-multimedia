@@ -61,7 +61,8 @@ SELECT CONCAT(SUBSTRING(timestamp, 1, 4), '-', SUBSTRING(timestamp, 5, 2), '-', 
 	SUM(CASE WHEN event_action = 'enable-about-link' THEN event_samplingFactor ELSE 0 END) AS 'enable-about-link',
 	SUM(CASE WHEN event_action = 'image-unview' THEN event_samplingFactor ELSE 0 END) AS 'image-unview',
 	SUM(CASE WHEN event_action = 'metadata-scroll-open' THEN event_samplingFactor ELSE 0 END) AS 'metadata-scroll-open',
-	SUM(CASE WHEN event_action = 'metadata-scroll-close' THEN event_samplingFactor ELSE 0 END) AS 'metadata-scroll-close'
+	SUM(CASE WHEN event_action = 'metadata-scroll-close' THEN event_samplingFactor ELSE 0 END) AS 'metadata-scroll-close',
+	SUM(CASE WHEN event_action = 'right-click-image' THEN event_samplingFactor ELSE 0 END) AS 'right-click-image'
 
 	FROM (
 		SELECT timestamp, event_action, 1 AS event_samplingFactor FROM MediaViewer_7670440
@@ -92,6 +93,9 @@ SELECT CONCAT(SUBSTRING(timestamp, 1, 4), '-', SUBSTRING(timestamp, 5, 2), '-', 
 			WHERE %wiki% timestamp < TIMESTAMP(CURDATE()) AND timestamp >= TIMESTAMP(DATE_SUB(CURDATE(), INTERVAL 30 DAY))
 		UNION ALL
 		SELECT timestamp, event_action, event_samplingFactor FROM MediaViewer_10606177
+			WHERE %wiki% timestamp < TIMESTAMP(CURDATE()) AND timestamp >= TIMESTAMP(DATE_SUB(CURDATE(), INTERVAL 30 DAY))
+		UNION ALL
+		SELECT timestamp, event_action, event_samplingFactor FROM MediaViewer_10867062
 			WHERE %wiki% timestamp < TIMESTAMP(CURDATE()) AND timestamp >= TIMESTAMP(DATE_SUB(CURDATE(), INTERVAL 30 DAY))
 		UNION ALL
 		SELECT timestamp, (CASE WHEN event_value = 0 THEN 'pref-optout-loggedin' ELSE 'pref-optin-loggedin' END) AS event_action, 1 AS event_samplingFactor FROM PrefUpdate_5563398
