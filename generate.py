@@ -60,7 +60,7 @@ def generate(folder, wiki, metric=None):
 
     sql = open(
         os.path.dirname(os.path.realpath(__file__)) +
-        '/' + folder + '/template.sql').read(10000)
+        '/' + folder + '/template.sql').read()
     sql = sql.replace('%wiki%', replacement)
     sql = sql.replace('%wikidb%', wiki)
 
