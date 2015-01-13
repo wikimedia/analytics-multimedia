@@ -42,8 +42,8 @@ perf_metrics = [
     {'name': 'imageusage', 'where': 'event_type = \'imageusage\'', 'fields': default_fields},
     {'name': 'globalusage', 'where': 'event_type = \'globalusage\'', 'fields': default_fields},
     {'name': 'image', 'where': 'event_type = \'image\'', 'fields': default_fields},
-    {'name': 'imagemiss', 'where': 'event_type = \'image\' AND LENGTH(event_XCache) > 0 AND event_varnish1hits = 0 AND event_varnish2hits = 0 AND event_varnish2hits = 0', 'fields': 'event_type, event_total, timestamp, wiki, event_XCache, event_varnish1hits, event_varnish2hits, event_varnish3hits'},
-    {'name': 'imagehit', 'where': 'event_type = \'image\' AND LENGTH(event_XCache) > 0 AND (event_varnish1hits > 0 OR event_varnish2hits > 0 OR event_varnish2hits > 0)', 'fields': 'event_type, event_total, timestamp, wiki, event_XCache, event_varnish1hits, event_varnish2hits, event_varnish3hits'},
+    {'name': 'imagemiss', 'where': 'event_type = \'image\' AND LENGTH(event_XVarnish) > 0 AND event_varnish1hits = 0 AND event_varnish2hits = 0 AND (event_varnish3hits = 0 OR event_varnish3hits IS NULL)', 'fields': 'event_type, event_total, timestamp, wiki, event_XCache, event_varnish1hits, event_varnish2hits, event_varnish3hits'},
+    {'name': 'imagehit', 'where': 'event_type = \'image\' AND LENGTH(event_XVarnish) > 0 AND (event_varnish1hits > 0 OR event_varnish2hits > 0 OR event_varnish3hits > 0)', 'fields': 'event_type, event_total, timestamp, wiki, event_XCache, event_varnish1hits, event_varnish2hits, event_varnish3hits'},
 ]
 
 geo_perf_metrics = [
