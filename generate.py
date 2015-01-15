@@ -88,6 +88,7 @@ for wiki in wikis:
 
     generate('actions', wiki)
     generate('duration', wiki)
+    generate('pageviews', wiki)
 
     if wiki != 'global':
         generate('optout', wiki)
