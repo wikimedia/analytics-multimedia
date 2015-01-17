@@ -2,7 +2,7 @@ SELECT
     *
 FROM (
     SELECT
-        CONCAT(SUBSTR(day, 1, 4), '-', SUBSTR(day, 5, 2), '-', SUBSTR(day, 7, 2)) day,
+        CONCAT(SUBSTR(day, 1, 4), '-', SUBSTR(day, 5, 2), '-', SUBSTR(day, 7, 2)) datestring,
         SUM(file_views) file_views,
         SUM(nonfile_views) nonfile_views
     FROM (
@@ -18,7 +18,7 @@ FROM (
     GROUP BY day
 ) NavigatonTimingDaily JOIN (
     SELECT
-        CONCAT(SUBSTR(day, 1, 4), '-', SUBSTR(day, 5, 2), '-', SUBSTR(day, 7, 2)) day,
+        CONCAT(SUBSTR(day, 1, 4), '-', SUBSTR(day, 5, 2), '-', SUBSTR(day, 7, 2)) datestring,
         SUM(samplingFactor) mmv_views
     FROM (
         SELECT SUBSTR(timestamp, 1, 8) day, COUNT(*) samplingFactor FROM MediaViewer_6054199 WHERE %wiki% event_action = 'image-view' GROUP BY day
@@ -37,5 +37,5 @@ FROM (
         UNION ALL SELECT SUBSTR(timestamp, 1, 8) day, SUM(event_samplingFactor) samplingFactor FROM MediaViewer_10606177 WHERE %wiki% event_action = 'image-view' GROUP BY day
     ) MediaViewer
     GROUP BY day
-) MediaViewerDaily USING (day)
+) MediaViewerDaily USING (datestring)
 ORDER BY day ASC;
