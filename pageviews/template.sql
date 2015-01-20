@@ -3,8 +3,8 @@ SELECT
 FROM (
     SELECT
         CONCAT(SUBSTR(day, 1, 4), '-', SUBSTR(day, 5, 2), '-', SUBSTR(day, 7, 2)) datestring,
-        SUM(file_views) file_views,
-        SUM(nonfile_views) nonfile_views
+        SUM(file_views) * 1000 file_views, -- NavigationTiming is sampled 1:1000
+        SUM(nonfile_views) * 1000 nonfile_views
     FROM (
         SELECT SUBSTR(timestamp, 1, 8) day, SUM(event_namespaceId = 6) file_views, SUM(event_namespaceId != 6) nonfile_views
             FROM NavigationTiming_10076863 WHERE %wiki% SUBSTR(timestamp, 1, 4) >= '2014' AND event_action = 'view' GROUP BY day
