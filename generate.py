@@ -30,6 +30,7 @@ wikis = [
     'tewiki',
     'thwiki',
     'viwiki',
+    'zhwiki',
 ]
 
 default_fields = 'event_type, event_total, timestamp, wiki'
