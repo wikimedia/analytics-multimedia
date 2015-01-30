@@ -1,0 +1,3 @@
+#!/usr/bin/env bash
+# move this to the .git/hooks directory of the data repo
+/usr/bin/env python generate.py ~/tsvs_sql
