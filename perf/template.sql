@@ -37,4 +37,4 @@ WHERE %wiki% timestamp < TIMESTAMP(CURDATE()) AND timestamp >= TIMESTAMP(DATE_SU
 UNION ALL
 SELECT %metricfields% FROM MultimediaViewerNetworkPerformance_10774577
 WHERE %wiki% timestamp < TIMESTAMP(CURDATE()) AND timestamp >= TIMESTAMP(DATE_SUB(CURDATE(), INTERVAL 90 DAY)) AND event_total > 20 AND %metricwhere%
-) AS MultimediaViewerNetworkPerformanceUnioned GROUP BY datestring ORDER BY datestring ASC ) stats USING (datestring) HAVING imagehit_sample_size IS NOT NULL
+) AS MultimediaViewerNetworkPerformanceUnioned GROUP BY datestring ORDER BY datestring ASC ) stats USING (datestring) HAVING %metricname%_sample_size IS NOT NULL
