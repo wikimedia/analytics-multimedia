@@ -29,6 +29,6 @@ CAST(SUBSTRING_INDEX(SUBSTRING_INDEX(
 CAST(SUBSTRING_INDEX(SUBSTRING_INDEX(
   GROUP_CONCAT(event_total ORDER BY event_total SEPARATOR ','),
    ',', 99/100 * COUNT(*) + 1), ',', -1) AS DECIMAL) AS image_time_99th_percentile FROM (
-SELECT event_type, event_total, event_uploadTimestamp, wiki FROM MultimediaViewerNetworkPerformance_10596581
+SELECT event_type, event_total, event_uploadTimestamp, wiki FROM MultimediaViewerNetworkPerformance_11030254
 WHERE event_uploadTimestamp < TIMESTAMP(CURDATE()) AND event_uploadTimestamp >= TIMESTAMP(DATE_SUB(CURDATE(), INTERVAL 730 DAY)) AND event_total > 20 AND event_type = 'image' AND event_varnish1hits = 0 AND event_varnish2hits = 0 AND event_varnish3hits = 0
 ) AS MultimediaViewerNetworkPerformanceUnioned GROUP BY datestring ORDER BY datestring ASC ) stats USING (datestring) WHERE image_time_mean IS NOT NULL

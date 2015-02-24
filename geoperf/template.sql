@@ -27,4 +27,7 @@ WHERE %wiki% %metricwhere% AND timestamp < TIMESTAMP(CURDATE()) AND timestamp >=
 UNION ALL
 SELECT timestamp, event_total, event_country, event_type, wiki FROM MultimediaViewerNetworkPerformance_10774577
 WHERE %wiki% %metricwhere% AND timestamp < TIMESTAMP(CURDATE()) AND timestamp >= TIMESTAMP(DATE_SUB(CURDATE(), INTERVAL 10 DAY)) AND event_total > 20 AND event_country != ''
+UNION ALL
+SELECT timestamp, event_total, event_country, event_type, wiki FROM MultimediaViewerNetworkPerformance_11030254
+WHERE %wiki% %metricwhere% AND timestamp < TIMESTAMP(CURDATE()) AND timestamp >= TIMESTAMP(DATE_SUB(CURDATE(), INTERVAL 10 DAY)) AND event_total > 20 AND event_country != ''
 ) MultimediaViewerNetworkPerformanceUnioned GROUP BY country HAVING sample_size > 10 ORDER BY mean ASC
