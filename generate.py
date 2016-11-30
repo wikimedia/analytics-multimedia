@@ -76,6 +76,7 @@ def generate(folder, wiki, metric=None):
     f.write(sql)
     f.close()
 
+
 if len(sys.argv) != 2:
     print 'Must specific a folder to send generated SQL to'
     sys.exit(2)
