@@ -6,7 +6,7 @@ SELECT
     SUM(CASE WHEN event_step = 'details' THEN 1 ELSE 0 END) AS 'details',
     SUM(CASE WHEN event_step = 'thanks' THEN 1 ELSE 0 END) AS 'thanks'
 FROM
-    UploadWizardStep_8851805
+    UploadWizardStep_11772724
 WHERE
     timestamp >= TIMESTAMP(DATE_SUB(CURDATE(), INTERVAL 30 DAY))
     AND timestamp < TIMESTAMP(DATE_SUB(CURDATE(), INTERVAL 1 DAY))

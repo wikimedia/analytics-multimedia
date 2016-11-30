@@ -29,15 +29,15 @@ CAST(SUBSTRING_INDEX(SUBSTRING_INDEX(
 CAST(SUBSTRING_INDEX(SUBSTRING_INDEX(
   GROUP_CONCAT(event_total ORDER BY event_total SEPARATOR ','),
    ',', 99/100 * COUNT(*) + 1), ',', -1) AS DECIMAL) AS %metricname%_time_99th_percentile FROM (
-SELECT %metricfields% FROM MultimediaViewerNetworkPerformance_7917896
-WHERE %wiki% timestamp < TIMESTAMP(CURDATE()) AND timestamp >= TIMESTAMP(DATE_SUB(CURDATE(), INTERVAL 90 DAY)) AND event_total > 20 AND %metricwhere%
-UNION ALL
-SELECT %metricfields% FROM MultimediaViewerNetworkPerformance_10596581
-WHERE %wiki% timestamp < TIMESTAMP(CURDATE()) AND timestamp >= TIMESTAMP(DATE_SUB(CURDATE(), INTERVAL 90 DAY)) AND event_total > 20 AND %metricwhere%
-UNION ALL
 SELECT %metricfields% FROM MultimediaViewerNetworkPerformance_10774577
 WHERE %wiki% timestamp < TIMESTAMP(CURDATE()) AND timestamp >= TIMESTAMP(DATE_SUB(CURDATE(), INTERVAL 90 DAY)) AND event_total > 20 AND %metricwhere%
 UNION ALL
 SELECT %metricfields% FROM MultimediaViewerNetworkPerformance_11030254
+WHERE %wiki% timestamp < TIMESTAMP(CURDATE()) AND timestamp >= TIMESTAMP(DATE_SUB(CURDATE(), INTERVAL 90 DAY)) AND event_total > 20 AND %metricwhere%
+UNION ALL
+SELECT %metricfields% FROM MultimediaViewerNetworkPerformance_12458951
+WHERE %wiki% timestamp < TIMESTAMP(CURDATE()) AND timestamp >= TIMESTAMP(DATE_SUB(CURDATE(), INTERVAL 90 DAY)) AND event_total > 20 AND %metricwhere%
+UNION ALL
+SELECT %metricfields% FROM MultimediaViewerNetworkPerformance_15573630
 WHERE %wiki% timestamp < TIMESTAMP(CURDATE()) AND timestamp >= TIMESTAMP(DATE_SUB(CURDATE(), INTERVAL 90 DAY)) AND event_total > 20 AND %metricwhere%
 ) AS MultimediaViewerNetworkPerformanceUnioned GROUP BY datestring ORDER BY datestring ASC ) stats USING (datestring) HAVING %metricname%_sample_size IS NOT NULL
